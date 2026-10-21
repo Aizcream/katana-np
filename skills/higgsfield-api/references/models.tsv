@@ -1,0 +1,84 @@
+endpoint	title	docs
+higgsfield/ads-studio/v1.0	Ads Studio — Generate ads API	https://docs.higgsfield.ai/docs/models/ads-studio/generate.md
+higgsfield/cinema-studio/4.0	Cinema Studio 4.0 — Generate API	https://docs.higgsfield.ai/docs/models/cinema-studio-4/generate.md
+higgsfield/genjutsu/motion-transfer/v1.0	Genjutsu — Motion transfer API	https://docs.higgsfield.ai/docs/models/genjutsu/motion-transfer.md
+higgsfield/genjutsu/object-swap/v1.0	Genjutsu — Object swap API	https://docs.higgsfield.ai/docs/models/genjutsu/object-swap.md
+higgsfield/genjutsu/restyle/v1.0	Genjutsu — Restyle API	https://docs.higgsfield.ai/docs/models/genjutsu/restyle.md
+xai/grok-imagine-image-2.0	Grok Image 2.0 — Generate and edit API	https://docs.higgsfield.ai/docs/models/grok-image-2/generate-and-edit.md
+xai/grok-imagine-video/v1.5/reference-to-video	Grok Imagine Video 1.5 — Reference to video API	https://docs.higgsfield.ai/docs/models/grok-video-1-5/reference-to-video.md
+minimax/hailuo-2.3/standard/image-to-video	Hailuo 2.3 — Standard image to video API	https://docs.higgsfield.ai/docs/models/hailuo-2-3/standard-image-to-video.md
+minimax/hailuo-2.3/standard/text-to-video	Hailuo 2.3 — Standard text to video API	https://docs.higgsfield.ai/docs/models/hailuo-2-3/standard-text-to-video.md
+alibaba/happy-horse/v1.1/image-to-video	HappyHorse 1.1 — Image to video API	https://docs.higgsfield.ai/docs/models/happy-horse-1-1/image-to-video.md
+alibaba/happy-horse/v1.1/reference-to-video	HappyHorse 1.1 — Reference to video API	https://docs.higgsfield.ai/docs/models/happy-horse-1-1/reference-to-video.md
+alibaba/happy-horse/v1.1/text-to-video	HappyHorse 1.1 — Text to video API	https://docs.higgsfield.ai/docs/models/happy-horse-1-1/text-to-video.md
+alibaba/happy-horse/image-to-video	Happy Horse 1.0 — Image to video API	https://docs.higgsfield.ai/docs/models/happy-horse-1/image-to-video.md
+alibaba/happy-horse/reference-to-video	Happy Horse 1.0 — Reference to video API	https://docs.higgsfield.ai/docs/models/happy-horse-1/reference-to-video.md
+alibaba/happy-horse/text-to-video	Happy Horse 1.0 — Text to video API	https://docs.higgsfield.ai/docs/models/happy-horse-1/text-to-video.md
+ideogram/v4.0	Ideogram 4.0 — Generate API	https://docs.higgsfield.ai/docs/models/ideogram-4/generate.md
+kling-video/v2.5-turbo/pro/image-to-video	Kling 2.5 Turbo — Pro image to video API	https://docs.higgsfield.ai/docs/models/kling-2-5-turbo/pro-image-to-video.md
+kling-video/v2.5-turbo/pro/text-to-video	Kling 2.5 Turbo — Pro text to video API	https://docs.higgsfield.ai/docs/models/kling-2-5-turbo/pro-text-to-video.md
+kling-video/v2.5-turbo/standard/image-to-video	Kling 2.5 Turbo — Standard image to video API	https://docs.higgsfield.ai/docs/models/kling-2-5-turbo/standard-image-to-video.md
+kling-video/motion-control/pro	Kling 2.6 Motion Control — Pro API	https://docs.higgsfield.ai/docs/models/kling-2-6-motion-control/pro.md
+kling-video/motion-control/std	Kling 2.6 Motion Control — Standard API	https://docs.higgsfield.ai/docs/models/kling-2-6-motion-control/std.md
+kling-video/v2.6/pro/image-to-video	Kling 2.6 — Pro image to video API	https://docs.higgsfield.ai/docs/models/kling-2-6/pro-image-to-video.md
+kling-video/v2.6/pro/text-to-video	Kling 2.6 — Pro text to video API	https://docs.higgsfield.ai/docs/models/kling-2-6/pro-text-to-video.md
+kling-video/v3/motion-control/pro	Kling 3.0 Motion Control — Pro API	https://docs.higgsfield.ai/docs/models/kling-3-motion-control/pro.md
+kling-video/v3/motion-control/std	Kling 3.0 Motion Control — Standard API	https://docs.higgsfield.ai/docs/models/kling-3-motion-control/std.md
+kling-video/v3.0/4k/image-to-video	Kling 3.0 — 4K · Image to video API	https://docs.higgsfield.ai/docs/models/kling-3/4k-image-to-video.md
+kling-video/v3.0/4k/text-to-video	Kling 3.0 — 4K · Text to video API	https://docs.higgsfield.ai/docs/models/kling-3/4k-text-to-video.md
+kling-video/v3.0/pro/image-to-video	Kling 3.0 — Pro · Image to video API	https://docs.higgsfield.ai/docs/models/kling-3/pro-image-to-video.md
+kling-video/v3.0/pro/text-to-video	Kling 3.0 — Pro · Text to video API	https://docs.higgsfield.ai/docs/models/kling-3/pro-text-to-video.md
+kling-video/v3.0/std/image-to-video	Kling 3.0 — Standard · Image to video API	https://docs.higgsfield.ai/docs/models/kling-3/standard-image-to-video.md
+kling-video/v3.0/std/text-to-video	Kling 3.0 — Standard · Text to video API	https://docs.higgsfield.ai/docs/models/kling-3/standard-text-to-video.md
+kling-video/v3.0-turbo/image-to-video	Kling 3.0 — Turbo · Image to video API	https://docs.higgsfield.ai/docs/models/kling-3/turbo-image-to-video.md
+kling-video/v3.0-turbo/text-to-video	Kling 3.0 — Turbo · Text to video API	https://docs.higgsfield.ai/docs/models/kling-3/turbo-text-to-video.md
+kling-video/o3/first-last-frame	Kling O3 — First last frame API	https://docs.higgsfield.ai/docs/models/kling-o3/first-last-frame.md
+kling-video/o3/image-reference	Kling O3 — Image reference API	https://docs.higgsfield.ai/docs/models/kling-o3/image-reference.md
+kling-video/o3/video-edit	Kling O3 — Video edit API	https://docs.higgsfield.ai/docs/models/kling-o3/video-edit.md
+kling-video/o3/video-reference	Kling O3 — Video reference API	https://docs.higgsfield.ai/docs/models/kling-o3/video-reference.md
+kling-video/omni/first-last-frame	Kling Omni — First last frame API	https://docs.higgsfield.ai/docs/models/kling-omni/first-last-frame.md
+kling-video/omni/image-reference	Kling Omni — Image reference API	https://docs.higgsfield.ai/docs/models/kling-omni/image-reference.md
+kling-video/omni/video-edit	Kling Omni — Video edit API	https://docs.higgsfield.ai/docs/models/kling-omni/video-edit.md
+kling-video/omni/video-reference	Kling Omni — Video reference API	https://docs.higgsfield.ai/docs/models/kling-omni/video-reference.md
+lightricks/ltx-2.5/image-to-video/fast	LTX-2.5 — Image to video fast API	https://docs.higgsfield.ai/docs/models/ltx-2-5/image-to-video-fast.md
+lightricks/ltx-2.5/image-to-video/pro	LTX-2.5 — Image to video pro API	https://docs.higgsfield.ai/docs/models/ltx-2-5/image-to-video-pro.md
+lightricks/ltx-2.5/text-to-video/fast	LTX-2.5 — Text to video fast API	https://docs.higgsfield.ai/docs/models/ltx-2-5/text-to-video-fast.md
+lightricks/ltx-2.5/text-to-video/pro	LTX-2.5 — Text to video pro API	https://docs.higgsfield.ai/docs/models/ltx-2-5/text-to-video-pro.md
+marketing-studio/image/flare	Marketing Studio Image — 2.5 Flare API	https://docs.higgsfield.ai/docs/models/marketing-studio-image/flare.md
+marketing-studio/image	Marketing Studio Image — 2.0 Alpha API	https://docs.higgsfield.ai/docs/models/marketing-studio-image/generate-and-edit.md
+marketing-studio/image/sunburst	Marketing Studio Image — 2.5 Sunburst API	https://docs.higgsfield.ai/docs/models/marketing-studio-image/sunburst.md
+minimax/h3/image-to-video	MiniMax H3 — Image to video API	https://docs.higgsfield.ai/docs/models/minimax-h3/image-to-video.md
+minimax/h3/reference-to-video	MiniMax H3 — Reference to video API	https://docs.higgsfield.ai/docs/models/minimax-h3/reference-to-video.md
+minimax/h3/text-to-video	MiniMax H3 — Text to video API	https://docs.higgsfield.ai/docs/models/minimax-h3/text-to-video.md
+pixverse/v6/image-to-video	PixVerse V6 — Image to video API	https://docs.higgsfield.ai/docs/models/pixverse-v6/image-to-video.md
+pixverse/v6/text-to-video	PixVerse V6 — Text to video API	https://docs.higgsfield.ai/docs/models/pixverse-v6/text-to-video.md
+alibaba/qwen-image-3/edit	Qwen Image 3 — Edit images API	https://docs.higgsfield.ai/docs/models/qwen-image-3/edit.md
+alibaba/qwen-image-3/text-to-image	Qwen Image 3 — Text to image API	https://docs.higgsfield.ai/docs/models/qwen-image-3/text-to-image.md
+recraft/v4.1/pro/text-to-image	Recraft V4.1 Pro — Text to image API	https://docs.higgsfield.ai/docs/models/recraft-v4-1-pro/generate.md
+recraft/v4.1/utility/pro/text-to-image	Recraft V4.1 Utility Pro — Text to image API	https://docs.higgsfield.ai/docs/models/recraft-v4-1-utility-pro/text-to-image.md
+recraft/v4.1/utility/text-to-image	Recraft V4.1 Utility — Text to image API	https://docs.higgsfield.ai/docs/models/recraft-v4-1-utility/text-to-image.md
+recraft/v4.1/text-to-image	Recraft V4.1 — Text to image API	https://docs.higgsfield.ai/docs/models/recraft-v4-1/text-to-image.md
+bytedance/seedance-2.5/image-to-video	Seedance 2.5 — Image to video API	https://docs.higgsfield.ai/docs/models/seedance-2-5/image-to-video.md
+bytedance/seedance-2.5/reference-to-video	Seedance 2.5 — Reference to video API	https://docs.higgsfield.ai/docs/models/seedance-2-5/reference-to-video.md
+bytedance/seedance-2.5/text-to-video	Seedance 2.5 — Text to video API	https://docs.higgsfield.ai/docs/models/seedance-2-5/text-to-video.md
+bytedance/seedance-2.5/video-edit	Seedance 2.5 — Video edit API	https://docs.higgsfield.ai/docs/models/seedance-2-5/video-edit.md
+bytedance/seedance-2.5/video-extend	Seedance 2.5 — Video extend API	https://docs.higgsfield.ai/docs/models/seedance-2-5/video-extend.md
+bytedance/seedance-2.0/image-to-video	Seedance 2.0 — Image to video API	https://docs.higgsfield.ai/docs/models/seedance-2/image-to-video.md
+bytedance/seedance-2.0/reference-to-video	Seedance 2.0 — Reference to video API	https://docs.higgsfield.ai/docs/models/seedance-2/reference-to-video.md
+bytedance/seedance-2.0/text-to-video	Seedance 2.0 — Text to video API	https://docs.higgsfield.ai/docs/models/seedance-2/text-to-video.md
+higgsfield-ai/soul/v2/standard	SOUL V2 — Text to image API	https://docs.higgsfield.ai/docs/models/soul-2/generate.md
+higgsfield-ai/soul/cinema	SOUL Cinema — Text to image API	https://docs.higgsfield.ai/docs/models/soul-cinema/generate.md
+higgsfield-ai/soul/standard	SOUL — Text to image API	https://docs.higgsfield.ai/docs/models/soul-standard/generate.md
+wan/v2.6/image-to-video	Wan 2.6 — Image to video API	https://docs.higgsfield.ai/docs/models/wan-2-6/image-to-video.md
+wan/v2.6/reference-to-video	Wan 2.6 — Reference to video API	https://docs.higgsfield.ai/docs/models/wan-2-6/reference-to-video.md
+wan/v2.6/text-to-video	Wan 2.6 — Text to video API	https://docs.higgsfield.ai/docs/models/wan-2-6/text-to-video.md
+wan/v2.7/image-to-video	Wan 2.7 — Image to video API	https://docs.higgsfield.ai/docs/models/wan-2-7/image-to-video.md
+wan/v2.7/reference-to-video	Wan 2.7 — Reference to video API	https://docs.higgsfield.ai/docs/models/wan-2-7/reference-to-video.md
+wan/v2.7/text-to-video	Wan 2.7 — Text to video API	https://docs.higgsfield.ai/docs/models/wan-2-7/text-to-video.md
+alibaba/wan-3.0-prime/image-to-video	Wan 3.0 Prime — Image to video API	https://docs.higgsfield.ai/docs/models/wan-3-prime/image-to-video.md
+alibaba/wan-3.0-prime/reference-to-video	Wan 3.0 Prime — Reference to video API	https://docs.higgsfield.ai/docs/models/wan-3-prime/reference-to-video.md
+alibaba/wan-3.0-prime/text-to-video	Wan 3.0 Prime — Text to video API	https://docs.higgsfield.ai/docs/models/wan-3-prime/text-to-video.md
+alibaba/wan-3.0/image-to-video	Wan 3.0 — Image to video API	https://docs.higgsfield.ai/docs/models/wan-3/image-to-video.md
+alibaba/wan-3.0/reference-to-video	Wan 3.0 — Reference to video API	https://docs.higgsfield.ai/docs/models/wan-3/reference-to-video.md
+alibaba/wan-3.0/text-to-video	Wan 3.0 — Text to video API	https://docs.higgsfield.ai/docs/models/wan-3/text-to-video.md
+z-image/turbo	Z-Image Turbo — Generate API	https://docs.higgsfield.ai/docs/models/z-image-turbo/generate.md

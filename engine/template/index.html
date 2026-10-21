@@ -1,0 +1,25 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<!-- Katana film page. Size comes from film.js (K.start({format:'9x16'})); capture reloads at the comp size. -->
+<meta name="frame" content="1080x1920">
+<link rel="stylesheet" href="../../../fonts/fonts.css">
+<link rel="stylesheet" href="../../../engine/kit/kit.css">
+<style>
+  html,body{margin:0;background:#000;overflow:hidden}
+  #film{background:var(--k-bg)}
+  /* grain: keep it SUBTLE (≤.05): a texture you feel, not see */
+  #grain{position:absolute;inset:-200px;pointer-events:none;opacity:.045;mix-blend-mode:overlay;z-index:60;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+</style></head>
+<body>
+<div id="film"><div id="world"></div><div id="fx"></div><div id="grain"></div></div>
+<script src="../../../engine/katana.js"></script>
+<script src="../../../engine/clips.js"></script>
+<script src="../../../engine/kit/type.js"></script>
+<script src="../../../engine/kit/ui.js"></script>
+<script src="../../../engine/kit/media.js"></script>
+<script src="../../../engine/kit/transitions.js"></script>
+<script src="../../../engine/kit/looks.js"></script>
+<!-- the film: one file per scene is fine too (a syntax error in one must not break the others) -->
+<script src="film.js"></script>
+</body></html>

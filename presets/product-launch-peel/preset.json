@@ -1,0 +1,33 @@
+{
+ "slug": "product-launch-peel",
+ "title": "Product launch · colour blocks (Peel)",
+ "reference": "refs/r1_truejigga_claude_vs_katana.mp4",
+ "region": "top",
+ "analysis": "refs/analysis/r1_katana",
+ "bpm": 122,
+ "beatOffset": 0.265,
+ "duration": 20.0,
+ "fps": 30,
+ "source_size": [
+  1920,
+  1080
+ ],
+ "tags": [
+  "product",
+  "hardware",
+  "launch",
+  "colour-blocks",
+  "stickers",
+  "spins"
+ ],
+ "inputs": [
+  "product name",
+  "3-6 product views (cut-outs)",
+  "4-8 stickers/icons",
+  "phone UI capture",
+  "3 surfaces",
+  "tagline"
+ ],
+ "brief": "brief.md",
+ "note": "paths are relative to the Katana folder"
+}

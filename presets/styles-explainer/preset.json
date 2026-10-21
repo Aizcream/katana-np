@@ -1,0 +1,33 @@
+{
+ "slug": "styles-explainer",
+ "title": "Styles explainer · six looks (Claude Motion)",
+ "reference": "refs/r3_zainoldinn_katana_launch.mp4",
+ "region": null,
+ "analysis": "refs/analysis/r3",
+ "bpm": 150,
+ "beatOffset": 0.0,
+ "duration": 24.0,
+ "fps": 24,
+ "source_size": [
+  1440,
+  1080
+ ],
+ "tags": [
+  "explainer",
+  "styles",
+  "chapters",
+  "ascii",
+  "glitch",
+  "liquid",
+  "sticker-pop"
+ ],
+ "inputs": [
+  "hook question",
+  "prompt/brand moment",
+  "6-12 portraits or product photos",
+  "style names",
+  "CTA"
+ ],
+ "brief": "brief.md",
+ "note": "paths are relative to the Katana folder"
+}

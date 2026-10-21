@@ -1,0 +1,18 @@
+# Katana NP — what stays on each machine
+.DS_Store
+.venv/
+models/*.bin
+models/*.part
+tools/bin/
+engine/demos/_stills/
+projects/
+refs/*.mp4
+refs/*.json
+refs/sheets/
+refs/analysis/
+*.part
+elevenlabs-ledger.jsonl
+hf-ledger.jsonl
+__pycache__/
+*.pyc
+entrada/

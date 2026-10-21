@@ -1,0 +1,198 @@
+{
+ "language": "es",
+ "model": "ggml-large-v3-turbo-q5_0.bin",
+ "duration": 12.805,
+ "offset": 0,
+ "speech_segments": 2,
+ "dropped_hallucinations": [],
+ "text": "Tu página web tarda demasiado en cargar, en North Pearl la rediseñamos desde cero con Astro. Pasó de 81 a 94 en rendimiento. Escríbenos, el link está en la bio.",
+ "words": [
+  {
+   "text": "Tu",
+   "start": 0.37,
+   "p": 0.805,
+   "end": 0.45
+  },
+  {
+   "text": "página",
+   "start": 0.55,
+   "p": 0.889,
+   "end": 0.67
+  },
+  {
+   "text": "web",
+   "start": 0.985,
+   "p": 0.966,
+   "end": 1.065
+  },
+  {
+   "text": "tarda",
+   "start": 1.28,
+   "p": 0.995,
+   "end": 1.36
+  },
+  {
+   "text": "demasiado",
+   "start": 1.83,
+   "p": 0.988,
+   "end": 2.07
+  },
+  {
+   "text": "en",
+   "start": 2.07,
+   "p": 0.993,
+   "end": 2.29
+  },
+  {
+   "text": "cargar,",
+   "start": 2.38,
+   "p": 0.985,
+   "end": 2.915
+  },
+  {
+   "text": "en",
+   "start": 3.125,
+   "p": 0.916,
+   "end": 3.205
+  },
+  {
+   "text": "North",
+   "start": 3.25,
+   "p": 0.971,
+   "end": 3.45
+  },
+  {
+   "text": "Pearl",
+   "start": 3.65,
+   "p": 0.985,
+   "end": 3.75
+  },
+  {
+   "text": "la",
+   "start": 3.75,
+   "p": 0.985,
+   "end": 3.93
+  },
+  {
+   "text": "rediseñamos",
+   "start": 3.95,
+   "p": 0.995,
+   "end": 4.69
+  },
+  {
+   "text": "desde",
+   "start": 4.785,
+   "p": 0.984,
+   "end": 4.95
+  },
+  {
+   "text": "cero",
+   "start": 4.95,
+   "p": 0.976,
+   "end": 5.34
+  },
+  {
+   "text": "con",
+   "start": 5.425,
+   "p": 0.86,
+   "end": 5.56
+  },
+  {
+   "text": "Astro.",
+   "start": 5.57,
+   "p": 0.879,
+   "end": 6.075
+  },
+  {
+   "text": "Pasó",
+   "start": 6.415,
+   "p": 0.652,
+   "end": 6.52
+  },
+  {
+   "text": "de",
+   "start": 6.52,
+   "p": 0.92,
+   "end": 6.84
+  },
+  {
+   "text": "81",
+   "start": 6.99,
+   "p": 0.934,
+   "end": 7.62
+  },
+  {
+   "text": "a",
+   "start": 7.62,
+   "p": 0.931,
+   "end": 7.74
+  },
+  {
+   "text": "94",
+   "start": 8.17,
+   "p": 0.978,
+   "end": 8.615
+  },
+  {
+   "text": "en",
+   "start": 8.615,
+   "p": 0.945,
+   "end": 8.86
+  },
+  {
+   "text": "rendimiento.",
+   "start": 8.875,
+   "p": 0.839,
+   "end": 9.68
+  },
+  {
+   "text": "Escríbenos,",
+   "start": 9.905,
+   "p": 0.94,
+   "end": 10.75
+  },
+  {
+   "text": "el",
+   "start": 10.99,
+   "p": 0.981,
+   "end": 11.05
+  },
+  {
+   "text": "link",
+   "start": 11.05,
+   "p": 0.992,
+   "end": 11.27
+  },
+  {
+   "text": "está",
+   "start": 11.335,
+   "p": 0.979,
+   "end": 11.44
+  },
+  {
+   "text": "en",
+   "start": 11.555,
+   "p": 0.998,
+   "end": 11.64
+  },
+  {
+   "text": "la",
+   "start": 11.64,
+   "p": 0.98,
+   "end": 11.84
+  },
+  {
+   "text": "bio.",
+   "start": 11.965,
+   "p": 0.884,
+   "end": 12.24
+  }
+ ],
+ "segments": [
+  {
+   "text": "Tu página web tarda demasiado en cargar, en North Pearl la rediseñamos desde cero con Astro. Pasó de 81 a 94 en rendimiento. Escríbenos, el link está en la bio.",
+   "start": 0.0,
+   "end": 12.32
+  }
+ ]
+}

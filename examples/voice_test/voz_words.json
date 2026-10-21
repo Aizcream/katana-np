@@ -1,0 +1,139 @@
+{
+ "source": "elevenlabs",
+ "model": "eleven_multilingual_v2",
+ "voice_id": "TX3LPaxmHKxFdv7VOQHJ",
+ "text": "¿Tu web tarda en cargar? En North Pearl la rediseñamos con Astro: pasó de 81 a 94 en rendimiento. Escríbenos, el link está en la bio.",
+ "duration": 11.703,
+ "words": [
+  {
+   "text": "¿Tu",
+   "start": 0.07,
+   "end": 0.174
+  },
+  {
+   "text": "web",
+   "start": 0.232,
+   "end": 0.43
+  },
+  {
+   "text": "tarda",
+   "start": 0.511,
+   "end": 0.778
+  },
+  {
+   "text": "en",
+   "start": 0.813,
+   "end": 0.859
+  },
+  {
+   "text": "cargar?",
+   "start": 0.906,
+   "end": 1.37
+  },
+  {
+   "text": "En",
+   "start": 2.183,
+   "end": 2.368
+  },
+  {
+   "text": "North",
+   "start": 2.426,
+   "end": 2.694
+  },
+  {
+   "text": "Pearl",
+   "start": 2.752,
+   "end": 3.042
+  },
+  {
+   "text": "la",
+   "start": 3.17,
+   "end": 3.297
+  },
+  {
+   "text": "rediseñamos",
+   "start": 3.413,
+   "end": 4.156
+  },
+  {
+   "text": "con",
+   "start": 4.238,
+   "end": 4.435
+  },
+  {
+   "text": "Astro:",
+   "start": 4.516,
+   "end": 5.12
+  },
+  {
+   "text": "pasó",
+   "start": 5.399,
+   "end": 5.677
+  },
+  {
+   "text": "de",
+   "start": 5.735,
+   "end": 5.805
+  },
+  {
+   "text": "81",
+   "start": 5.898,
+   "end": 6.513
+  },
+  {
+   "text": "a",
+   "start": 6.606,
+   "end": 6.646
+  },
+  {
+   "text": "94",
+   "start": 6.676,
+   "end": 7.384
+  },
+  {
+   "text": "en",
+   "start": 7.5,
+   "end": 7.558
+  },
+  {
+   "text": "rendimiento.",
+   "start": 7.639,
+   "end": 8.417
+  },
+  {
+   "text": "Escríbenos,",
+   "start": 8.8,
+   "end": 9.706
+  },
+  {
+   "text": "el",
+   "start": 9.985,
+   "end": 10.124
+  },
+  {
+   "text": "link",
+   "start": 10.182,
+   "end": 10.461
+  },
+  {
+   "text": "está",
+   "start": 10.519,
+   "end": 10.786
+  },
+  {
+   "text": "en",
+   "start": 10.855,
+   "end": 10.925
+  },
+  {
+   "text": "la",
+   "start": 10.995,
+   "end": 11.064
+  },
+  {
+   "text": "bio.",
+   "start": 11.111,
+   "end": 11.703
+  }
+ ]
+}

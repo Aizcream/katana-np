@@ -1,0 +1,5 @@
+/* kit.css — shared component styles (theme tokens come from K.applyTheme as --k-* variables) */
+.k-display{font-family:var(--k-display);font-weight:800;letter-spacing:-.045em;line-height:.9}
+.k-serif{font-family:var(--k-serif);font-style:italic;font-weight:400;letter-spacing:-.02em}
+.k-mono{font-family:var(--k-mono);font-weight:500;letter-spacing:0}
+.k-wide{font-family:var(--k-wide);font-weight:800;font-stretch:125%;letter-spacing:-.02em}

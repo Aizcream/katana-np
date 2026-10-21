@@ -1,0 +1,110 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<!-- Demo asset generator (ui family): a tall screenshot of "Aurora Café" (a fictional coffee shop; auroracafe.co is a
+     placeholder domain) for K.kit.browser / laptop / phone scroll demos.
+     Desktop: node tools/capture.mjs engine/demos/assets/ui/site_mock.html <dir> --stills 0 --jpg --serve .  (1440×4500 → site_desktop.jpg)
+     Mobile:  same with --query m=1 (430 css px at zoom 2 → 860×9140 → site_mobile.jpg). _hero_new.jpg (desktop hero),
+     _hero_m.jpg and _tile_*.jpg are vector illustrations rendered for this fictional brand (no photos, no real people). -->
+<meta name="frame" content="1440x4500">
+<link rel="stylesheet" href="../../../../fonts/fonts.css">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#F7EFE4;overflow:hidden}
+  body{font-family:"Inter Tight",sans-serif;color:#2B1810;width:1440px}
+  .it{font-family:"Instrument Serif",serif;font-style:italic;font-weight:400}
+  .terra{color:#E0673C}.sage{color:#5E7A45}
+  section{position:relative;overflow:hidden}
+  .hero{height:1020px;background:url(_hero_new.jpg) center/cover}
+  .logos{height:160px;display:flex;align-items:center;justify-content:space-around;background:#2B1810;color:#F7EFE4;font:600 26px "Bricolage Grotesque";letter-spacing:-.01em}
+  .logos span:nth-child(2n){font:500 18px "Geist Mono";letter-spacing:.24em;color:#FFB27A}
+  .svc{height:900px;background:#F7EFE4;padding:110px 120px 0}
+  .eyebrow{font:600 20px "Geist Mono";letter-spacing:.32em;color:#E0673C;text-transform:uppercase}
+  h2{font:700 84px/.98 "Bricolage Grotesque";letter-spacing:-.05em;margin:22px 0 60px}
+  h2 .it{font-size:1.1em;letter-spacing:-.01em}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:36px}
+  .card{position:relative;background:#fff;border-radius:30px;padding:44px 40px;height:440px;box-shadow:0 30px 60px -30px rgba(90,45,20,.3)}
+  .ico{width:84px;height:84px;border-radius:24px;display:grid;place-items:center;font-size:40px;margin-bottom:30px}
+  .card h3{font:700 40px "Bricolage Grotesque";letter-spacing:-.04em;line-height:1.05;margin-bottom:6px}
+  .card small{display:block;font:600 15px "Geist Mono";letter-spacing:.18em;color:#8A5A3C;margin-bottom:16px}
+  .card p{font-size:22px;line-height:1.45;color:#6B4A38}
+  .price{position:absolute;left:40px;bottom:40px;font:700 26px "Inter Tight"}
+  .more{position:absolute;right:40px;bottom:34px;font:600 18px "Inter Tight";color:#fff;background:#2B1810;padding:12px 22px;border-radius:30px}
+  .proj{height:1100px;padding:110px 120px 0;background:#fff}
+  .grid{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:380px 380px;gap:28px}
+  .tile{border-radius:28px;background-size:cover;background-position:center;position:relative;overflow:hidden}
+  .tile::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,rgba(30,15,8,.62))}
+  .tile b{position:absolute;left:30px;bottom:26px;z-index:2;color:#fff;font:700 36px "Bricolage Grotesque";letter-spacing:-.04em}
+  .tile i{position:absolute;left:30px;top:24px;z-index:2;font:600 16px "Geist Mono";letter-spacing:.16em;color:#fff;background:rgba(255,255,255,.22);padding:8px 14px;border-radius:30px;font-style:normal;backdrop-filter:blur(8px)}
+  .stats{height:420px;background:#E0673C;color:#fff;display:flex;align-items:center;justify-content:space-around;padding:0 80px}
+  .st{text-align:center}.st b{display:block;font:700 130px/1 "Bricolage Grotesque";letter-spacing:-.06em}.st span{font:600 20px "Geist Mono";letter-spacing:.2em;opacity:.85;text-transform:uppercase}
+  .cta{height:520px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#FFE2C2}
+  .cta h2{font-size:110px;text-align:center;margin:0 0 44px}
+  .btn{display:inline-flex;gap:14px;align-items:center;font-weight:600;font-size:28px;padding:24px 44px;border-radius:60px;background:#2B1810;color:#fff;box-shadow:0 20px 40px -16px rgba(43,24,16,.6)}
+  footer{height:380px;background:#1E120B;color:#e9d9c6;padding:80px 120px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px}
+  footer b{font:700 46px "Bricolage Grotesque";letter-spacing:-.05em;color:#fff}
+  footer h4{font:600 16px "Geist Mono";letter-spacing:.2em;margin-bottom:22px;color:#FFB27A}
+  footer p{font-size:20px;line-height:1.9;opacity:.8}
+  /* ---- mobile ---- */
+  body.m{width:430px;zoom:2}
+  .m .hero{height:760px;background:url(_hero_m.jpg) center bottom/cover}
+  .m .hero::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(30,12,20,.55),rgba(30,12,20,.25) 46%,rgba(0,0,0,0) 62%)}
+  .m .nav{position:absolute;left:14px;right:14px;top:52px;height:60px;border-radius:30px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font:700 22px "Bricolage Grotesque";letter-spacing:-.04em;z-index:2}
+  .m .nav i{width:22px;height:14px;border-top:2.5px solid #2B1810;border-bottom:2.5px solid #2B1810;position:relative}
+  .m .nav i::after{content:"";position:absolute;left:0;right:0;top:3.5px;border-top:2.5px solid #2B1810}
+  .m .hcopy{position:absolute;left:22px;right:22px;top:150px;color:#fff;z-index:2}
+  .m .hcopy small{font:600 11px "Geist Mono";letter-spacing:.24em;color:#FFD39A}
+  .m .hcopy h1{font:700 50px/.95 "Bricolage Grotesque";letter-spacing:-.05em;margin:12px 0 18px}
+  .m .hcopy h1 .it{font-size:1.12em;color:#FFB27A}
+  .m .hcopy .btn{font-size:16px;padding:14px 22px;background:#E0673C}
+  .m .logos{height:120px;font-size:17px;flex-wrap:wrap;padding:0 12px}
+  .m .logos span:nth-child(n+4){display:none}
+  .m .logos span:nth-child(2n){font-size:12px}
+  .m .svc{height:1150px;padding:60px 22px 0}
+  .m .eyebrow{font-size:11px}
+  .m h2{font-size:42px;margin:14px 0 30px}
+  .m .cards{grid-template-columns:1fr;gap:18px}
+  .m .card{height:300px;padding:28px 24px}
+  .m .ico{width:56px;height:56px;font-size:26px;border-radius:16px;margin-bottom:16px}
+  .m .card h3{font-size:28px}.m .card small{font-size:11px;margin-bottom:10px}.m .card p{font-size:15px}
+  .m .price{left:24px;bottom:24px;font-size:18px}.m .more{right:24px;bottom:20px;font-size:14px;padding:9px 16px}
+  .m .proj{height:1300px;padding:60px 22px 0}
+  .m .grid{grid-template-columns:1fr;grid-template-rows:repeat(4,250px);gap:16px}
+  .m .tile b{font-size:26px;left:20px;bottom:18px}.m .tile i{font-size:11px;left:18px;top:16px}
+  .m .stats{height:520px;flex-direction:column;justify-content:center;gap:26px;padding:0}
+  .m .st b{font-size:76px}.m .st span{font-size:12px}
+  .m .cta{height:420px}.m .cta h2{font-size:52px;margin-bottom:26px}
+  .m footer{height:300px;grid-template-columns:1fr;padding:40px 22px;gap:10px}
+  .m footer b{font-size:32px}.m footer div:nth-child(n+3){display:none}
+  .d-only{} .m .d-only{display:none} .m-only{display:none} .m .m-only{display:block} .m .m-only.nav{display:flex}
+</style></head>
+<body>
+<section class="hero"><div class="m-only nav">aurora café<i></i></div>
+  <div class="m-only hcopy"><small>TOSTADO ESTE LUNES · LOTE 27</small><h1>Café que <span class="it">despierta</span> tu mañana.</h1><span class="btn">Comprar café →</span></div></section>
+<section class="logos"><span>Tostado cada lunes</span><span>ENVÍO EN 48 H</span><span>Comercio directo</span><span>100% ARÁBICA</span><span>4,9 ★ en reseñas</span></section>
+<section class="svc"><div class="eyebrow">— Nuestros cafés</div>
+  <h2>Tres cafés para <span class="it terra">cada</span><br>mañana</h2>
+  <div class="cards">
+    <div class="card"><div class="ico" style="background:#FFE2C2">☀️</div><h3>Amanecer</h3><small>HUILA · LAVADO</small><p>Panela, cacao y naranja. Dulce y redondo, para empezar el día.</p><span class="price">$42.000</span><span class="more">Agregar +</span></div>
+    <div class="card"><div class="ico" style="background:#E3EBD5">🌿</div><h3>Brisa</h3><small>NARIÑO · HONEY</small><p>Floral, cítrico y miel. Ligero y brillante, ideal en filtrado.</p><span class="price">$46.000</span><span class="more">Agregar +</span></div>
+    <div class="card"><div class="ico" style="background:#F6D9CF">🔥</div><h3>Fogata</h3><small>TOLIMA · NATURAL</small><p>Chocolate oscuro y nuez. Intenso, perfecto para espresso.</p><span class="price">$39.000</span><span class="more">Agregar +</span></div>
+  </div></section>
+<section class="proj"><div class="eyebrow">— Momentos Aurora</div>
+  <h2>Hecho con <span class="it terra">calma</span></h2>
+  <div class="grid">
+    <div class="tile" style="background-image:url(_tile_a.jpg)"><i>BARRA</i><b>Latte de la casa</b></div>
+    <div class="tile" style="background-image:url(_tile_b.jpg)"><i>TALLER</i><b>Métodos filtrados</b></div>
+    <div class="tile" style="background-image:url(_tile_c.jpg)"><i>TOSTADURÍA</i><b>Tostado cada lunes</b></div>
+    <div class="tile" style="background-image:url(_tile_d.jpg)"><i>NUEVO</i><b>Brisa, edición limitada</b></div>
+  </div></section>
+<section class="stats"><div class="st"><b>+12</b><span>orígenes</span></div><div class="st"><b>48 h</b><span>del tueste a tu taza</span></div><div class="st"><b>4,9</b><span>en reseñas</span></div></section>
+<section class="cta"><h2>¿Café fresco <span class="it terra">cada</span> mes?</h2><span class="btn">Suscríbete →</span></section>
+<footer><div><b>aurora café</b><p>Café de especialidad, tostado con calma.</p></div><div><h4>NAVEGA</h4><p>Tienda<br>Suscripción<br>Nosotros</p></div><div><h4>CONTACTO</h4><p>hola@auroracafe.co<br>Lun–Sáb · 7:00–19:00</p></div><div><h4>SÍGUENOS</h4><p>Instagram<br>TikTok</p></div></footer>
+<script>
+  const M = new URLSearchParams(location.search).has('m');
+  if (M) document.body.classList.add('m');
+  window.__comp = { width: M ? 860 : 1440, height: M ? 9140 : 4500, fps: 30, duration: 1 };
+  const bgs = ['_hero_new.jpg', '_tile_a.jpg', '_tile_b.jpg', '_tile_c.jpg', '_tile_d.jpg', '_hero_m.jpg'].map((s) => { const i = new Image(); i.src = s; return i.decode().catch(() => {}); });
+  window.__ready = document.fonts.ready.then(() => Promise.all(bgs)).then(() => new Promise((r) => setTimeout(r, 300))).then(() => true);
+  window.__seek = async () => {};
+</script>
+</body></html>

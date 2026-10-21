@@ -1,0 +1,255 @@
+#!/usr/bin/env bash
+# katana — el Katana propio de North Pearl: ediciones de motion graphics a partir de una referencia, renderizadas desde código.
+#
+#   katana analyze <video> [--region top|bottom|x:y:w:h] [--out DIR]   desarma una referencia (cortes, beats, OCR, energía, hojas)
+#   katana new <proyecto> [--format 9x16|16x9|1x1|4x5] [--fps 30] [--dur 5]   proyecto nuevo desde la plantilla
+#   katana clip <proyecto> <video> <id> [--from s] [--to s] [--h 1920]   toma → secuencia de cuadros para la película
+#   katana stills <proyecto> <t1,t2,…> [--query q]                      fotos fijas + hoja de contacto (revisión rápida)
+#   katana preview <proyecto> [--port N]                              URL local con reproductor en tiempo real
+#   katana render <proyecto> [--draft|--final] [--mb N] [--from s --to s] [--lens] [--nosound] [--name x]   MP4
+#   katana mix <proyecto>                                             solo el audio (cues + música/voz → audio/mix.wav)
+#   katana compare <ref.mp4> <nuestro.mp4> [--region top]             lado a lado con etiquetas
+#   katana sheet <video> [--fps 2] [--from s --to s]                  hoja de contacto con tiempos
+#   katana qa <video>                                                 duración, fps, volumen, saltos/congelados, hoja
+#   katana gallery <demo.html> <t1,t2,…>                              fotos de una página demo del kit (engine/demos)
+#   katana renderpage <page.html> <out.mp4> [--mb N]                  cualquier página __seek → MP4 (sin sonido)
+#   katana energy <video> [--region top] [--vs ref/energy.json]       energía (cámara, sacudidas, destellos, cortes) vs la referencia
+#   katana transcribe <media> [--out words.json] [--srt f.srt]        tiempos por palabra (español, whisper.cpp) para subtítulos
+#   katana voice check|voices|library|add|say …                       locución ElevenLabs + tiempos exactos (siempre estima primero)
+#   katana refs [x.com/…/status/ID]                                   descarga + analiza las referencias de los presets (o un video de X)
+#   katana doctor [--fast] · keys elevenlabs|higgsfield|status · update · version     instalación y mantenimiento
+set -euo pipefail
+KROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+T="$KROOT/tools"
+NODE="${NODE:-$(command -v node || true)}"
+PY="${PY:-$([[ -x "$KROOT/.venv/bin/python" ]] && echo "$KROOT/.venv/bin/python" || echo python3)}"
+FDIFF="${FDIFF:-$KROOT/tools/bin/fdiff}"
+
+die() { echo "katana: $*" >&2; exit 1; }
+need_node() { [[ -n "$NODE" ]] || die "Node 22 o más nuevo no encontrado → brew install node (o: nvm install 22), abre una Terminal nueva y ejecuta ./install.sh"
+  local v; v=$("$NODE" -v 2>/dev/null | sed 's/v//;s/\..*//'); [[ -n "$v" && "$v" -ge 22 ]] || die "esta Terminal usa Node $("$NODE" -v 2>/dev/null); Katana necesita 22 o más nuevo → brew install node (o: nvm install 22 && nvm alias default 22)"; }
+proj_dir() { local p="$1"; [[ -d "$p/film" ]] && { (cd "$p" && pwd); return; }; [[ -d "$KROOT/projects/$p/film" ]] && { echo "$KROOT/projects/$p"; return; }; die "no existe el proyecto '$p' (busqué en ./$p y en $KROOT/projects/$p; lista: ls $KROOT/projects)"; }
+opt() { local name="$1" def="$2"; shift 2; local i=0 a=("$@"); while (( i < ${#a[@]} )); do [[ "${a[$i]}" == "$name" ]] && { echo "${a[$((i+1))]}"; return; }; i=$((i+1)); done; echo "$def"; }
+flag() { local name="$1"; shift; for x in "$@"; do [[ "$x" == "$name" ]] && return 0; done; return 1; }
+sheet_dir() {  # sheet_dir <dir with png/jpg> <out.jpg> [cols]
+  "$PY" - "$1" "$2" "${3:-6}" <<'EOF'
+import sys, os
+from PIL import Image, ImageDraw
+d, out, cols = sys.argv[1], sys.argv[2], int(sys.argv[3])
+import re
+def tkey(f):
+    m = re.match(r'still_([\d.]+)_', f); return (float(m.group(1)) if m else 1e9, f)
+fs = sorted((f for f in os.listdir(d) if f.lower().endswith(('.png', '.jpg')) and not f.startswith('sheet')), key=tkey)
+if not fs: sys.exit('no images in ' + d)
+ims = [Image.open(os.path.join(d, f)).convert('RGB') for f in fs]
+w = 360; ims = [i.resize((w, int(i.size[1] * w / i.size[0]))) for i in ims]; h = max(i.size[1] for i in ims)
+rows = (len(ims) + cols - 1) // cols; S = Image.new('RGB', (cols * (w + 6), rows * (h + 24)), 'white'); D = ImageDraw.Draw(S)
+for k, (im, f) in enumerate(zip(ims, fs)):
+    x, y = (k % cols) * (w + 6), (k // cols) * (h + 24); S.paste(im, (x, y + 20)); D.text((x + 4, y + 4), f[:48], fill=(0, 0, 0))
+S.save(out, quality=88); print('sheet:', out)
+EOF
+}
+# x264 output: convert the RGB/JPEG frames with the BT.709 matrix into LIMITED range (JPEG frames decode as full-range yuvj → the
+# MP4 would be full range and look washed/crushed on phones) and write the colour tags into the stream and the container.
+VENC=(-vf "scale=out_color_matrix=bt709:out_range=tv:flags=lanczos+accurate_rnd+full_chroma_int,format=yuv420p" -c:v libx264 -profile:v high
+  -color_range tv -color_primaries bt709 -color_trc bt709 -colorspace bt709 -x264-params "colorprim=bt709:transfer=bt709:colormatrix=bt709:range=tv")
+fps_rational() { "$PY" -c "import sys;f=float(sys.argv[1]);print({29.97:'30000/1001',23.976:'24000/1001',59.94:'60000/1001'}.get(round(f,3), sys.argv[1]))" "$1"; }
+
+cmd="${1:-help}"; shift || true
+case "$cmd" in
+  analyze)
+    [[ $# -ge 1 ]] || die "usage: katana analyze <video> [--region top] [--out DIR]"
+    "$PY" "$T/analyze_ref.py" "$@" ;;
+
+  new)
+    [[ $# -ge 1 ]] || die "usage: katana new <project> [--format 9x16] [--fps 30] [--dur 15]"
+    name="$1"; shift; P="$KROOT/projects/$name"; [[ -e "$P" ]] && die "ya existe $P (elige otro nombre)"
+    fmt=$(opt --format 9x16 "$@"); fps=$(opt --fps 30 "$@"); dur=$(opt --dur 5 "$@")
+    mkdir -p "$P"/{film,assets/clips,assets/img,audio,renders,stills}
+    cp "$KROOT/engine/template/index.html" "$KROOT/engine/template/film.js" "$P/film/"
+    case "$fmt" in 9x16) wh=1080x1920;; 16x9) wh=1920x1080;; 1x1) wh=1080x1080;; 4x5) wh=1080x1350;; 4x3) wh=1440x1080;; *) die "formato desconocido: $fmt (usa 9x16, 16x9, 1x1, 4x5 o 4x3)";; esac
+    sed -i '' "s/content=\"1080x1920\"/content=\"$wh\"/" "$P/film/index.html"
+    sed -i '' "s/K.start({ format: '9x16', fps: 30, dur: 5 })/K.start({ format: '$fmt', fps: $fps, dur: $dur })/" "$P/film/film.js"
+    cat > "$P/brief.md" <<EOF
+# $name — brief
+
+<inputs>
+Format: $fmt · $fps fps · $dur s. Reference: (path) · Assets: (footage, photos, logo, UI captures) · Copy: (exact on-screen text)
+</inputs>
+
+Trick: The trick of this ref is <device> on <timing/structure> so that <what the viewer feels>. Family: F6 (designed graphics).
+Energy to carry (from refs/analysis/<ref>/energy.json): cuts …/s · flashes …/s · camera moving …% · hits …/s.
+
+<direction>
+Concept, palette (hex), type (display / serif emphasis / mono labels), camera language, materials, avoid-list.
+</direction>
+
+<structure>
+0:00–0:00.0 / BEAT NAME — picture · camera · on-screen copy · transition out · sound cue
+</structure>
+
+<build>
+Scenes in film/film.js on the beat grid (K.bpm), kit components only, every frame a pure function of t.
+</build>
+
+<gotchas>
+Safe zones (9:16): top 220, bottom 420, right 130 px. Nothing important by opacity alone. Zoom direction never flips at a cut.
+</gotchas>
+EOF
+    echo "proyecto nuevo: $P  ($fmt, $fps fps, $dur s)"; printf '  edita %s/film/film.js · vista previa: ./katana preview %q · render: ./katana render %q --draft\n' "$P" "$name" "$name" ;;
+
+  clip)
+    [[ $# -ge 3 ]] || die "usage: katana clip <project> <video> <id> [--from s] [--to s] [--h 1920] [--q 3]"
+    P=$(proj_dir "$1"); src="$2"; id="$3"; shift 3
+    from=$(opt --from 0 "$@"); to=$(opt --to "" "$@"); h=$(opt --h 1920 "$@"); q=$(opt --q 3 "$@")
+    D="$P/assets/clips/$id"; rm -rf "$D"; mkdir -p "$D"
+    trc=$(ffprobe -v error -select_streams v:0 -show_entries stream=color_transfer -of csv=p=0 "$src" || true)
+    fpsr=$(ffprobe -v error -select_streams v:0 -show_entries stream=avg_frame_rate -of csv=p=0 "$src")
+    [[ "$trc" == "arib-std-b67" || "$trc" == "smpte2084" ]] && echo "katana clip: WARNING $src is HDR ($trc) — convert to SDR first (Rec.709), colours will look flat/washed" >&2
+    args=(-v error -y -ss "$from" -i "$src"); [[ -n "$to" ]] && args+=(-t "$("$PY" -c "print(max(0.04, $to - $from))")")
+    ffmpeg "${args[@]}" -vf "scale=-2:$h:flags=lanczos" -q:v "$q" -start_number 0 "$D/f_%04d.jpg"
+    n=$(ls "$D" | grep -c '^f_')
+    "$PY" - "$D" "$fpsr" "$n" "$src" "$from" <<'EOF'
+import sys, json
+from PIL import Image
+d, fr, n, src, frm = sys.argv[1], sys.argv[2], int(sys.argv[3]), sys.argv[4], float(sys.argv[5])
+a, b = (int(x) for x in fr.split('/')); fps = a / b if b else 30
+w, h = Image.open(f'{d}/f_0000.jpg').size
+json.dump({'frames': n, 'fps': round(fps, 4), 'width': w, 'height': h, 'pattern': 'f_%04d.jpg', 'first': 0, 'duration': round(n / fps, 4), 'source': src, 'from': frm}, open(f'{d}/_clip.json', 'w'), indent=1)
+print(f'clip: {n} frames {w}x{h} @ {fps:.3f} fps → {d}')
+EOF
+    ;;
+
+  stills)
+    need_node; [[ $# -ge 2 ]] || die "usage: katana stills <project> <t1,t2,…> [--out DIR]"
+    P=$(proj_dir "$1"); times="$2"; shift 2; out=$(opt --out "$P/stills/check" "$@")
+    rm -rf "$out"; mkdir -p "$out"
+    q=$(opt --query "" "$@"); qa=(); [[ -n "$q" ]] && qa=(--query "$q")
+    "$NODE" "$T/capture.mjs" "$P/film/index.html" "$out" --stills "$times" --serve "$KROOT" --lenient ${qa[@]+"${qa[@]}"}
+    sheet_dir "$out" "$out/sheet.jpg" 6 ;;
+
+  gallery)
+    need_node; [[ $# -ge 2 ]] || die "usage: katana gallery <demo.html> <t1,t2,…> [--out DIR]"
+    page="$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"; times="$2"; shift 2
+    out=$(opt --out "$KROOT/engine/demos/_stills/$(basename "${page%.html}")" "$@"); rm -rf "$out"; mkdir -p "$out"
+    q=$(opt --query "" "$@"); qa=(); [[ -n "$q" ]] && qa=(--query "$q")
+    "$NODE" "$T/capture.mjs" "$page" "$out" --stills "$times" --serve "$KROOT" --lenient ${qa[@]+"${qa[@]}"}
+    sheet_dir "$out" "$out/sheet.jpg" 6 ;;
+
+  preview)
+    [[ $# -ge 1 ]] || die "uso: katana preview <proyecto> [--port N]"
+    P=$(proj_dir "$1"); rel="${P#$KROOT/}"
+    base=$(opt --port "$((8700 + $(printf %s "$KROOT" | cksum | cut -d' ' -f1) % 200))" "$@")
+    relq=$("$PY" -c "import sys,urllib.parse;print(urllib.parse.quote(sys.argv[1]))" "$rel")
+    url=""
+    for port in $(seq "$base" $((base + 10))); do
+      u="http://127.0.0.1:$port/$relq/film/index.html?play=1"
+      curl -sfo /dev/null "$u" && { url=$u; break; }                      # ya hay un servidor nuestro en ese puerto
+      if ! lsof -ti "tcp:$port" -sTCP:LISTEN >/dev/null 2>&1; then          # puerto libre: arrancar uno nuevo
+        nohup "$PY" -m http.server "$port" --bind 127.0.0.1 --directory "$KROOT" </dev/null >/dev/null 2>&1 & disown
+        for i in $(seq 25); do curl -sfo /dev/null "$u" && break; sleep 0.2; done
+        curl -sfo /dev/null "$u" && { url=$u; break; }
+      fi
+    done
+    [[ -n "$url" ]] || die "no pude iniciar el servidor de vista previa (puertos $base–$((base + 10)) ocupados; prueba --port N)"
+    echo "$url"; echo "(servidor local en el puerto $port; para detenerlo: lsof -ti tcp:$port -sTCP:LISTEN | xargs kill)" >&2 ;;
+
+  mix)
+    need_node; [[ $# -ge 1 ]] || die "usage: katana mix <project>"
+    P=$(proj_dir "$1"); shift
+    "$NODE" "$T/pageinfo.mjs" "$P/film/index.html" "$P/audio/pageinfo.json"
+    "$PY" "$T/mix.py" "$P/audio/pageinfo.json" "$P/audio/mix.wav" "$@" ;;
+
+  render)
+    need_node; [[ $# -ge 1 ]] || die "usage: katana render <project> [--draft|--final] [--from s --to s] [--mb N] [--workers N] [--lens] [--nosound] [--cpu] [--keep] [--name x]"
+    P=$(proj_dir "$1"); shift
+    mode=draft; flag --final "$@" && mode=final
+    workers=$(opt --workers "" "$@"); mb=$(opt --mb 8 "$@"); from=$(opt --from "" "$@"); to=$(opt --to "" "$@")
+    name=$(opt --name "" "$@"); stamp=$(date +%Y%m%d_%H%M%S)
+    F="$P/renders/_frames_$mode"; rm -rf "$F"; mkdir -p "$F"
+    "$NODE" "$T/pageinfo.mjs" "$P/film/index.html" "$P/audio/pageinfo.json"
+    cap=("$NODE" "$T/capture.mjs" "$P/film/index.html" "$F" --serve "$KROOT" --clean)
+    if [[ $mode == draft ]]; then cap+=(--draft --workers "${workers:-6}"); else cap+=(--mb "$mb" --shutter 0.5 --workers "${workers:-6}"); fi
+    # GPU raster by default (a 20 s 9:16 final: ~4 min). --cpu = bit-exact CPU raster (determinism checks; ~20× slower).
+    if flag --cpu "$@"; then export KATANA_CPU_RASTER=1; else export KATANA_CPU_RASTER=0; fi
+    [[ -n "$from" ]] && cap+=(--from "$from"); [[ -n "$to" ]] && cap+=(--to "$to")
+    t0=$(date +%s); "${cap[@]}"; echo "capture: $(( $(date +%s) - t0 )) s"
+    if flag --lens "$@"; then "$PY" "$T/lens.py" "$F" --fps "$("$PY" -c "import json;print(json.load(open('$F/_comp.json'))['fps'])")"; fi
+    fps=$("$PY" -c "import json;print(json.load(open('$F/_comp.json'))['fps'])"); ext=$("$PY" -c "import json;print(json.load(open('$F/_comp.json'))['ext'])")
+    first=$(ls "$F" | grep -E "^f_[0-9]+\.$ext$" | sort | head -1 | sed -E "s/f_0*([0-9]+)\..*/\1/"); first=${first:-0}
+    out="$P/renders/${name:-${mode}}_$stamp.mp4"
+    enc=(ffmpeg -v error -y -framerate "$(fps_rational "$fps")" -start_number "$first" -i "$F/f_%05d.$ext")
+    if ! flag --nosound "$@"; then
+      "$PY" "$T/mix.py" "$P/audio/pageinfo.json" "$P/audio/mix.wav"
+      ss=$("$PY" -c "print(${first}/$fps)")
+      enc+=(-ss "$ss" -i "$P/audio/mix.wav" -map 0:v -map 1:a -c:a aac -b:a 256k -shortest)
+    fi
+    crf=18; [[ $mode == final ]] && crf=14
+    enc+=("${VENC[@]}" -preset slow -crf $crf -movflags +faststart "$out")
+    "${enc[@]}"
+    flag --keep "$@" || rm -rf "$F"     # frames are re-creatable; --keep leaves them for lens/patch work
+    echo "render: $out"; ffprobe -v error -show_entries format=duration:stream=codec_name,width,height,r_frame_rate,pix_fmt,color_range,color_primaries -of compact=p=0 "$out" ;;
+
+  renderpage)   # any __seek page (kit demos, tests) → MP4 without sound: katana renderpage <page.html> <out.mp4> [--mb N] [--from s --to s]
+    need_node; [[ $# -ge 2 ]] || die "usage: katana renderpage <page.html> <out.mp4> [--mb N] [--from s] [--to s] [--workers N]"
+    page="$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"; out="$2"; shift 2
+    F="$(mktemp -d "${TMPDIR:-/tmp}/kpage.XXXXXX")"
+    cap=("$NODE" "$T/capture.mjs" "$page" "$F" --serve "$KROOT" --clean --workers "$(opt --workers 6 "$@")")
+    mbv=$(opt --mb "" "$@"); if [[ -n "$mbv" ]]; then cap+=(--mb "$mbv" --shutter 0.5); else cap+=(--draft); fi
+    [[ -n "$(opt --from "" "$@")" ]] && cap+=(--from "$(opt --from "" "$@")"); [[ -n "$(opt --to "" "$@")" ]] && cap+=(--to "$(opt --to "" "$@")")
+    "${cap[@]}"
+    fps=$("$PY" -c "import json;print(json.load(open('$F/_comp.json'))['fps'])"); ext=$("$PY" -c "import json;print(json.load(open('$F/_comp.json'))['ext'])")
+    first=$(ls "$F" | grep -E "^f_[0-9]+\.$ext$" | sort | head -1 | sed -E "s/f_0*([0-9]+)\..*/\1/"); first=${first:-0}
+    ffmpeg -v error -y -framerate "$(fps_rational "$fps")" -start_number "$first" -i "$F/f_%05d.$ext" "${VENC[@]}" -preset medium -crf 18 -movflags +faststart "$out"
+    rm -rf "$F"; echo "renderpage: $out" ;;
+
+  energy)       # energy rates of any video, optionally against a reference energy.json: katana energy <mp4> [--region top] [--vs ref_energy.json]
+    [[ $# -ge 1 ]] || die "usage: katana energy <video> [--region top] [--vs refs/analysis/<ref>/energy.json] [--out f.json]"
+    "$PY" "$T/energy.py" "$@" ;;
+
+  transcribe)   # word-level timestamps (Spanish) for captions: katana transcribe <media> [--out words.json] [--prompt "North Pearl"] [--srt f.srt]
+    [[ $# -ge 1 ]] || die "usage: katana transcribe <video|audio> [--out words.json] [--lang es] [--prompt 'vocabulario'] [--from s] [--to s] [--srt f.srt]"
+    command -v whisper-cli >/dev/null || die "whisper.cpp missing: brew install whisper.cpp (see README)"
+    "$PY" "$T/transcribe.py" "$@" ;;
+
+  voice)        # ElevenLabs voice-over with exact word timings: katana voice check | library --lang es | say "texto" --voice X --out projects/<p>/assets/voz --yes
+    "$PY" "$T/voice.py" "$@" ;;
+
+  setup|install) exec "$KROOT/install.sh" "$@" ;;
+  refs)    exec bash "$T/fetch_refs.sh" "$@" ;;
+  doctor)  exec bash "$T/doctor.sh" "$@" ;;
+  keys)    exec bash "$T/keys.sh" "$@" ;;
+  update)
+    [[ "${1:-}" == -h || "${1:-}" == --help ]] && { echo "katana update — descarga la última versión (git pull) y vuelve a comprobar la instalación"; exit 0; }
+    cd "$KROOT" || exit 1
+    [[ -d .git ]] || die "esta carpeta no es un clon de git: vuelve a instalar con git clone (ver INSTALL.md)"
+    git -c core.fileMode=false pull --ff-only || die "git pull falló (¿cambios locales en archivos del repositorio? git status · ¿pide contraseña? gh auth setup-git)"
+    exec "$KROOT/install.sh" --quick $(cat "${KATANA_CONFIG_DIR:-$HOME/.config/katana}/flags" 2>/dev/null) ;;
+  version) cd "$KROOT" && echo "Katana NP $(cat VERSION 2>/dev/null || echo dev) · $(git log -1 --format='%h %cs' 2>/dev/null || echo 'sin git')" ;;
+
+  compare)
+    [[ $# -ge 2 ]] || die "usage: katana compare <ref.mp4> <ours.mp4> [--region top] [--out f.mp4] [--layout h|v] [--labels 'REFERENCIA,KATANA NP']"
+    "$PY" "$T/compare.py" "$@" ;;
+
+  sheet)
+    [[ $# -ge 1 ]] || die "usage: katana sheet <video> [--fps 2] [--out f.jpg] [--w 270] [--cols 8] [--from s] [--to s]"
+    v="$1"; shift; f=$(opt --fps 2 "$@"); out=$(opt --out "${v%.*}_sheet.jpg" "$@"); w=$(opt --w 270 "$@"); cols=$(opt --cols 8 "$@")
+    sfrom=$(opt --from 0 "$@"); sto=$(opt --to "" "$@")
+    tmp=$(mktemp -d "${TMPDIR:-/tmp}/ksheet.XXXXXX")
+    seg=(-ss "$sfrom"); [[ -n "$sto" ]] && seg+=(-to "$sto")
+    ffmpeg -v error -y "${seg[@]}" -i "$v" -vf "fps=$f,scale=$w:-2" -q:v 3 "$tmp/s_%05d.jpg"
+    "$PY" "$T/sheet.py" "$tmp" "$out" "$f" "$cols" "$sfrom"
+    rm -rf "$tmp" ;;
+
+  qa)
+    [[ $# -ge 1 ]] || die "usage: katana qa <video>"
+    v="$1"
+    ffprobe -v error -show_entries format=duration,bit_rate:stream=codec_name,profile,width,height,r_frame_rate,nb_frames,pix_fmt,color_primaries,channels,sample_rate -of compact=p=0 "$v"
+    ffmpeg -hide_banner -i "$v" -af ebur128=peak=true -f null - 2>&1 | grep -E "^\s+(I|LRA|Peak):" | tail -3 || true
+    [[ -x "$FDIFF" ]] && "$FDIFF" "$v" --out "${v%.*}_qa" || echo "(fdiff no está compilado: instala las Command Line Tools — xcode-select --install — y ejecuta ./install.sh)"
+    "$0" sheet "$v" ;;
+
+  help|-h|--help)
+    sed -n 2,21p "$0" | sed 's/^# \{0,1\}//' ;;
+  *) echo "katana: comando desconocido '$cmd' (lista: ./katana help)" >&2; exit 2 ;;
+esac

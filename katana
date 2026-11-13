@@ -103,8 +103,9 @@ EOF
     P=$(proj_dir "$1"); src="$2"; id="$3"; shift 3
     from=$(opt --from 0 "$@"); to=$(opt --to "" "$@"); h=$(opt --h 1920 "$@"); q=$(opt --q 3 "$@")
     D="$P/assets/clips/$id"; rm -rf "$D"; mkdir -p "$D"
-    trc=$(ffprobe -v error -select_streams v:0 -show_entries stream=color_transfer -of csv=p=0 "$src" || true)
-    fpsr=$(ffprobe -v error -select_streams v:0 -show_entries stream=avg_frame_rate -of csv=p=0 "$src")
+    # default=nw=1:nk=1: csv adds a trailing field (",") on rotated iPhone footage (display-matrix side data)
+    trc=$(ffprobe -v error -select_streams v:0 -show_entries stream=color_transfer -of default=nw=1:nk=1 "$src" | head -1 || true)
+    fpsr=$(ffprobe -v error -select_streams v:0 -show_entries stream=avg_frame_rate -of default=nw=1:nk=1 "$src" | head -1)
     [[ "$trc" == "arib-std-b67" || "$trc" == "smpte2084" ]] && echo "katana clip: WARNING $src is HDR ($trc) — convert to SDR first (Rec.709), colours will look flat/washed" >&2
     args=(-v error -y -ss "$from" -i "$src"); [[ -n "$to" ]] && args+=(-t "$("$PY" -c "print(max(0.04, $to - $from))")")
     ffmpeg "${args[@]}" -vf "scale=-2:$h:flags=lanczos" -q:v "$q" -start_number 0 "$D/f_%04d.jpg"
@@ -158,7 +159,8 @@ EOF
     need_node; [[ $# -ge 1 ]] || die "usage: katana mix <project>"
     P=$(proj_dir "$1"); shift
     "$NODE" "$T/pageinfo.mjs" "$P/film/index.html" "$P/audio/pageinfo.json"
-    "$PY" "$T/mix.py" "$P/audio/pageinfo.json" "$P/audio/mix.wav" "$@" ;;
+    sfxd=(); [[ -d "$P/audio/sfx" ]] && sfxd=(--sfx "$P/audio/sfx")     # a project SFX set (e.g. made with earshot) replaces the shared library
+    "$PY" "$T/mix.py" "$P/audio/pageinfo.json" "$P/audio/mix.wav" ${sfxd[@]+"${sfxd[@]}"} "$@" ;;
 
   render)
     need_node; [[ $# -ge 1 ]] || die "usage: katana render <project> [--draft|--final] [--from s --to s] [--mb N] [--workers N] [--lens] [--nosound] [--cpu] [--keep] [--name x]"
@@ -180,7 +182,8 @@ EOF
     out="$P/renders/${name:-${mode}}_$stamp.mp4"
     enc=(ffmpeg -v error -y -framerate "$(fps_rational "$fps")" -start_number "$first" -i "$F/f_%05d.$ext")
     if ! flag --nosound "$@"; then
-      "$PY" "$T/mix.py" "$P/audio/pageinfo.json" "$P/audio/mix.wav"
+      sfxd=(); [[ -d "$P/audio/sfx" ]] && sfxd=(--sfx "$P/audio/sfx")
+      "$PY" "$T/mix.py" "$P/audio/pageinfo.json" "$P/audio/mix.wav" ${sfxd[@]+"${sfxd[@]}"}   # bash 3.2 + set -u: empty array
       ss=$("$PY" -c "print(${first}/$fps)")
       enc+=(-ss "$ss" -i "$P/audio/mix.wav" -map 0:v -map 1:a -c:a aac -b:a 256k -shortest)
     fi

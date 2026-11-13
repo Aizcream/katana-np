@@ -425,7 +425,7 @@
     const text = o.upper ? String(o.text ?? '').toUpperCase() : String(o.text ?? '');
     const color = o.color || 'var(--k-fg)';
     const el = K.div(parent, o.z != null ? `z-index:${o.z}` : ''); el.className = 'kt';
-    const css = faceCss(face, { weight: o.weight ?? 900, tracking: o.tracking ?? ({ wide: -.02, cond: -.02, serif: -.02, roman: -.025, mono: -.04 }[face] ?? -.04), stretch: mode === 'stretch' ? sTo + '%' : undefined });
+    const css = faceCss(face, { weight: o.weight ?? 900, tracking: o.tracking ?? ({ wide: -.02, cond: -.02, serif: -.02, roman: -.025, mono: -.04 }[face] ?? -.04), stretch: mode === 'stretch' ? sTo + '%' : undefined }) + (o.wordSpace ? `;word-spacing:${o.wordSpace}em` : '');
     const size = o.size ?? fitSize(el, text, css, maxW, o.maxSize ?? defSize(tall() ? .36 : .42));
     const LH = size * (o.lineHeight ?? .9);
     const x = o.x ?? defX(align, maxW), y = o.y ?? defY();

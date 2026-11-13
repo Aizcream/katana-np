@@ -44,6 +44,7 @@
   function springFrom(lt, D0, v0, a, w = 17, z = .62) {
     if (lt <= 0) return { p: 1 - D0, v: v0 };
     if (lt >= a) return { p: 1, v: 0 };
+    z = Math.min(z, .995);                                   // z ≥ 1 made wd = 0 → NaN blur (push with z: 1)
     const wd = w * Math.sqrt(1 - z * z), B = (z * w * D0 - v0) / wd;
     const rem = (x) => Math.exp(-z * w * x) * (D0 * Math.cos(wd * x) + B * Math.sin(wd * x)) * (1 - E.smooth(K.p(x, a * .72, a)));
     const h = 1e-3, r = rem(lt);
@@ -634,7 +635,7 @@
   // ×`from` (< 1, still growing: direction preserved) out of the same blur; light streaks + bloom in fx.
   T.smear = (o = {}) => {
     const [b, a] = split(o, .5, .5), S = o.scale ?? 1.55, F = o.from ?? .8, k = o.k ?? 3, zA = zoomBlur(), zB = zoomBlur(), fx = {};
-    const lnS = Math.log(S), lnF = Math.log(F), v0 = lnS * k / b, k2 = clamp(v0 * a / -lnF, 1.5, 6), streaks = o.streaks ?? true, col = o.color || '#fff', bm = o.blur ?? 1;
+    const lnS = Math.log(S), lnF = Math.log(F), v0 = lnS * k / b, k2 = clamp(v0 * a / -lnF, 1.5, 6), streaks = o.streaks ?? true, col = o.color || '#fff', bm = o.blur ?? 1, burn = o.burn ?? .5;
     return make('smear', o, b, a, (t, { A, B, lt }) => {
       const [x, y] = pivot(o), sh = .5 / K.fps;
       let s, v;
@@ -644,8 +645,8 @@
       const env = lt < 0 ? E.in(2)(K.p(lt, -b, 0)) : (1 - K.p(lt, 0, a * .6)) ** 2.4;
       let amt = Math.min(1, Math.expm1(v * sh) * 2.2) * bm;
       if (lt >= 0) amt = Math.max(amt, 1 / s - 1 + .03);                  // the largest copy always covers the frame
-      if (lt < 0) { hide(B); if (A) css(A, { transform: about(x, y, s), filter: joinF(zA(x, y, amt), `brightness(${(1 + .5 * env).toFixed(3)})`) }); }
-      else { hide(A); if (B) css(B, { transform: about(x, y, s), filter: joinF(zB(x, y, amt), env > .01 ? `brightness(${(1 + .5 * env).toFixed(3)})` : '') }); }
+      if (lt < 0) { hide(B); if (A) css(A, { transform: about(x, y, s), filter: joinF(zA(x, y, amt), `brightness(${(1 + burn * env).toFixed(3)})`) }); }
+      else { hide(A); if (B) css(B, { transform: about(x, y, s), filter: joinF(zB(x, y, amt), env > .01 && burn > 0 ? `brightness(${(1 + burn * env).toFixed(3)})` : '') }); }
       if (streaks && env > .02) {
         const svg = fxSvg(fx, 's', '<g></g><circle/>').firstChild, g = svg.querySelector('g'), c = svg.querySelector('circle'), R = Math.hypot(K.W, K.H), m = Math.min(K.W, K.H);
         let d = ''; const N = 46, rr = K.rand(7 + (o.seed || 0));

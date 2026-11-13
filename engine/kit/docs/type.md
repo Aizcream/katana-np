@@ -139,6 +139,7 @@ add(K.kit.words(w, { text: 'link en la bio', at: K.beat(16) - t0, beats: [0, .5,
 | `shake` | `false` | `true` (= .03·size) or an amplitude (fraction of size): decaying impact shake + slight rotation on landing |
 | `font` · `weight` · `tracking` | `'display'` (`'wide'` for stretch) · 900 · −.04 (wide/cond/serif −.02, roman −.025, mono −.04) | |
 | `upper` | false | |
+| `wordSpace` | — | extra word spacing (em) — the condensed face's narrow space makes «SE PIERDEN.» read as one word: `.16` for `cond` |
 | `size` | auto-fit to `maxWidth`, capped by `maxSize` | |
 | `maxWidth` | K.W − 140 (9:16) / 0.84·K.W | |
 | `maxSize` | 0.36·S (9:16) / 0.42·S | |

@@ -332,6 +332,7 @@ K.trans.smear({ at, a, b })
 | `scale` | `1.55` | A's scale on the cut |
 | `from` | `.8` | B's scale on the cut (still growing → direction preserved; the blur covers the margin) |
 | `streaks` | `true` | radial light streaks + bloom in fx (screen blend) |
+| `burn` | `.5` | extra brightness at the cut (`1 + burn`); use `.05–.1` between two light scenes (paper/white would clip to blank white) |
 | `color` | `'#fff'` | streak / bloom colour |
 | `seed` | `0` | streak layout |
 | `dur` | `.5` | split 50 / 50 |

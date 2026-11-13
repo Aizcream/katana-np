@@ -358,6 +358,7 @@
     K.scenes.forEach((s) => { s.root.__z = String(s.z); });
     window.__seek = async (t) => {
       t = clamp(t, 0, K.dur - 1e-4);
+      if (K.timeRemap) t = clamp(K.timeRemap(t), 0, K.dur - 1e-4);   // picture-only time remap (e.g. a "lag"/fps-drop look); audio cues keep real time
       K.t = t;
       const c = K.camAt(t);
       world.style.transform = K.CAM.length ? `translate(${K.W / 2}px,${K.H / 2}px) rotateX(${c.rx}deg) rotateY(${c.ry}deg) rotateZ(${c.rz}deg) scale(${c.s}) translate(${-c.cx}px,${-c.cy}px)` : '';

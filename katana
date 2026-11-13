@@ -6,9 +6,10 @@
 #   katana clip <proyecto> <video> <id> [--from s] [--to s] [--h 1920]   toma → secuencia de cuadros para la película
 #   katana stills <proyecto> <t1,t2,…> [--query q]                      fotos fijas + hoja de contacto (revisión rápida)
 #   katana preview <proyecto> [--port N]                              URL local con reproductor en tiempo real
-#   katana render <proyecto> [--draft|--final] [--mb N] [--from s --to s] [--lens] [--nosound] [--name x]   MP4
+#   katana render <proyecto> [--draft|--final] [--mb N] [--from s --to s] [--lens|--nolens] [--nosound] [--name x]   MP4
 #   katana mix <proyecto>                                             solo el audio (cues + música/voz → audio/mix.wav)
 #   katana compare <ref.mp4> <nuestro.mp4> [--region top]             lado a lado con etiquetas
+#   katana match <ref.mp4> <nuestro.mp4> [--every 0.5] [--region top]  hojas a los MISMOS tiempos: referencia arriba, lo nuestro abajo
 #   katana sheet <video> [--fps 2] [--from s --to s]                  hoja de contacto con tiempos
 #   katana qa <video>                                                 duración, fps, volumen, saltos/congelados, hoja
 #   katana gallery <demo.html> <t1,t2,…>                              fotos de una página demo del kit (engine/demos)
@@ -72,29 +73,43 @@ case "$cmd" in
     sed -i '' "s/K.start({ format: '9x16', fps: 30, dur: 5 })/K.start({ format: '$fmt', fps: $fps, dur: $dur })/" "$P/film/film.js"
     cat > "$P/brief.md" <<EOF
 # $name — brief
-
-<inputs>
-Format: $fmt · $fps fps · $dur s. Reference: (path) · Assets: (footage, photos, logo, UI captures) · Copy: (exact on-screen text)
-</inputs>
+<!-- How to write it: skills/katana/references/brief.md (60–90 words per film second; every adjective has a witness). -->
 
 Trick: The trick of this ref is <device> on <timing/structure> so that <what the viewer feels>. Family: F6 (designed graphics).
-Energy to carry (from refs/analysis/<ref>/energy.json): cuts …/s · flashes …/s · camera moving …% · hits …/s.
+Reference: (path) · analysis: refs/analysis/<ref>/ · energy to carry: cuts …/s · camera moves …/s · hits …/s · flashes …/s.
+Paid generation: none | (list: shot · model · seconds/size · USD barato / fiel — skills/katana/references/routes-costs.md)
+
+<inputs>
+Brand / product · $fmt · $fps fps · exactly $dur s and N frames · language. The subject described physically.
+Assets (path → role). Copy locked word for word vs free. What is artwork, not real. Soundtrack.
+</inputs>
 
 <direction>
-Concept, palette (hex), type (display / serif emphasis / mono labels), camera language, materials, avoid-list.
+One sentence with the idea; the journey as three words (A → B → C). The world and what is NOT in it. Materials (nouns).
+Palette (hex + role, "approximate, refine against the reference"). Light. Camera language (verbs) and when it slows.
+Typography per role, where type lives. Persistent elements. Avoid-list.
 </direction>
 
 <structure>
-0:00–0:00.0 / BEAT NAME — picture · camera · on-screen copy · transition out · sound cue
+0:00.0–0:00.0 / BEAT NAME — opens on · objects with their parts · "exact copy" and how it appears · move and where it
+ARRIVES · what holds and for how long · what carries into the next beat
 </structure>
 
 <build>
-Scenes in film/film.js on the beat grid (K.bpm), kit components only, every frame a pure function of t.
+1. Renderer per scene (DOM/SVG, Canvas, scene3d). 2. Asset library. 3. Constants first (copy, colours, beat times).
+4. One time function, N frames, seeded, seekable. 5. Attachment and text rules. 6. Blur on travel, clarity on holds.
+7. Overlays in screen space. 8. Sound plan. 9. Preview first. 10. Deliverables.
 </build>
 
 <gotchas>
-Safe zones (9:16): top 220, bottom 420, right 130 px. Nothing important by opacity alone. Zoom direction never flips at a cut.
+The ways THIS film goes wrong, each checkable on a still. Safe zones (9:16): top 220, bottom 420, right 130 px.
+Nothing important by opacity alone. Zoom direction never flips at a cut. The final hold is part of the film.
 </gotchas>
+
+<start>
+1. Inspect the reference; one grouped question for missing assets. 2. Show asset list, route, timing map, stills of the
+hold poses, time and cost estimate; wait for the OK. 3. Blocking pass. 4. Materials, type, sound. 5. Final, QA gate.
+</start>
 EOF
     echo "proyecto nuevo: $P  ($fmt, $fps fps, $dur s)"; printf '  edita %s/film/film.js · vista previa: ./katana preview %q · render: ./katana render %q --draft\n' "$P" "$name" "$name" ;;
 
@@ -163,7 +178,7 @@ EOF
     "$PY" "$T/mix.py" "$P/audio/pageinfo.json" "$P/audio/mix.wav" ${sfxd[@]+"${sfxd[@]}"} "$@" ;;
 
   render)
-    need_node; [[ $# -ge 1 ]] || die "usage: katana render <project> [--draft|--final] [--from s --to s] [--mb N] [--workers N] [--lens] [--nosound] [--cpu] [--keep] [--name x]"
+    need_node; [[ $# -ge 1 ]] || die "usage: katana render <project> [--draft|--final] [--from s --to s] [--mb N] [--workers N] [--lens|--nolens] [--nosound] [--cpu] [--keep] [--name x]"
     P=$(proj_dir "$1"); shift
     mode=draft; flag --final "$@" && mode=final
     workers=$(opt --workers "" "$@"); mb=$(opt --mb 8 "$@"); from=$(opt --from "" "$@"); to=$(opt --to "" "$@")
@@ -176,7 +191,16 @@ EOF
     if flag --cpu "$@"; then export KATANA_CPU_RASTER=1; else export KATANA_CPU_RASTER=0; fi
     [[ -n "$from" ]] && cap+=(--from "$from"); [[ -n "$to" ]] && cap+=(--to "$to")
     t0=$(date +%s); "${cap[@]}"; echo "capture: $(( $(date +%s) - t0 )) s"
-    if flag --lens "$@"; then "$PY" "$T/lens.py" "$F" --fps "$("$PY" -c "import json;print(json.load(open('$F/_comp.json'))['fps'])")"; fi
+    # Photographed finish (tools/lens.py): a FINAL applies the film's own K.lens (set from the reference's grain / fringes /
+    # bloom / vignette). --lens forces the gentle house profile on a film without K.lens (drafts too); --nolens = clean.
+    lf=0; flag --lens "$@" && lf=1; ln=0; flag --nolens "$@" && ln=1
+    lensargs=$("$PY" "$T/lensargs.py" "$P/audio/pageinfo.json" "$mode" "$lf" "$ln" "$P/audio/lens_sched.json")
+    if [[ -n "$lensargs" ]]; then
+      # shellcheck disable=SC2086
+      sch=(); [[ -f "$P/audio/lens_sched.json" ]] && sch=(--sched "$P/audio/lens_sched.json")
+      "$PY" "$T/lens.py" "$F" --fps "$("$PY" -c "import json;print(json.load(open('$F/_comp.json'))['fps'])")" $lensargs ${sch[@]+"${sch[@]}"}
+      echo "lens: $lensargs"
+    fi
     fps=$("$PY" -c "import json;print(json.load(open('$F/_comp.json'))['fps'])"); ext=$("$PY" -c "import json;print(json.load(open('$F/_comp.json'))['ext'])")
     first=$(ls "$F" | grep -E "^f_[0-9]+\.$ext$" | sort | head -1 | sed -E "s/f_0*([0-9]+)\..*/\1/"); first=${first:-0}
     out="$P/renders/${name:-${mode}}_$stamp.mp4"
@@ -234,6 +258,10 @@ EOF
     [[ $# -ge 2 ]] || die "usage: katana compare <ref.mp4> <ours.mp4> [--region top] [--out f.mp4] [--layout h|v] [--labels 'REFERENCIA,KATANA NP']"
     "$PY" "$T/compare.py" "$@" ;;
 
+  match)        # same-timecode sheets against the reference: katana match <ref.mp4> <ours.mp4> [--every 0.5] [--region top] [--offset s] [--out DIR]
+    [[ $# -ge 2 ]] || die "usage: katana match <ref.mp4> <ours.mp4> [--every 0.5] [--from s] [--to s] [--region top] [--offset s] [--out DIR]"
+    "$PY" "$T/match.py" "$@" ;;
+
   sheet)
     [[ $# -ge 1 ]] || die "usage: katana sheet <video> [--fps 2] [--out f.jpg] [--w 270] [--cols 8] [--from s] [--to s]"
     v="$1"; shift; f=$(opt --fps 2 "$@"); out=$(opt --out "${v%.*}_sheet.jpg" "$@"); w=$(opt --w 270 "$@"); cols=$(opt --cols 8 "$@")
@@ -253,6 +281,6 @@ EOF
     "$0" sheet "$v" ;;
 
   help|-h|--help)
-    sed -n 2,21p "$0" | sed 's/^# \{0,1\}//' ;;
+    sed -n 2,22p "$0" | sed 's/^# \{0,1\}//' ;;
   *) echo "katana: comando desconocido '$cmd' (lista: ./katana help)" >&2; exit 2 ;;
 esac

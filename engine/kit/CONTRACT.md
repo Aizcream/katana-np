@@ -67,8 +67,22 @@ K.trans.name = ({ at, a, b, dur = .4, ...opts }) => K.transition({ type: 'name',
 - Global looks: `K.looks.name({ … })` registers `K.addPost(fn)` overlays (vignette, scanlines, light leaks, corner badge,
   colour wash) or sets a filter on `K.world` (grade). Document which kind each look is.
 
-## Quality bar — "Katana top half, not Claude Motion bottom half"
-Study `refs/sheets/*.jpg` and `refs/analysis/*/cuts/*.jpg` / `shots.jpg` (Katana is the TOP half of r1/r2). Katana reads
+## scene3d (scene3d.js, real 3D on three.js — full API in `docs/scene3d.md`)
+- `K.kit.scene3d(parent, { bg, env, lights, fov, dof, camera: [keys], build(ctx), frame(lt, ctx, state) })` follows the
+  component contract; `frame` is a PURE function of `lt` (set positions, never increment). One shared WebGL renderer
+  serves every scene3d on the page; each presents through its own canvas, so DOM can sit below and above it.
+- Needs `engine/vendor/three.katana.js` + `engine/kit/scene3d.js` after `looks.js` (the template loads them; pages made
+  before v2 must add the two `<script>` tags).
+- Faces drawn on 3D canvases (labels, cards, atlases) must be in `K.fonts` BEFORE `K.start`, or widths are measured
+  with a fallback face.
+- Motion blur comes from the capture shutter; floods of small tumbling pieces strobe at `--mb 8`: render them with
+  `--mb 16`. Depth of field is a deterministic post pass (`dof`); film-wide bloom/fringes/grain belong to `K.lens`.
+- Limits: no ambient occlusion, bloom or glass; one shadow-casting light; no GLTF loader; `pile` is choreography, not
+  physics. The demo layouts are composed for 16:9; recompose for 9:16.
+
+## Quality bar — the reference first; this look only when there is none
+With a reference, its own type, colour, materials and motion win (see `skills/katana/references/craft.md`). Without one,
+study `refs/sheets/*.jpg` and `refs/analysis/*/cuts/*.jpg` / `shots.jpg` (Katana is the TOP half of r1/r2). Katana reads
 as: BIG confident type (display 800–900, tracking −0.04…−0.06 em, tight leading .88–.95), one italic serif emphasis word,
 crisp hierarchy, one idea per frame, saturated colour blocks or a clean off-white with one accent, objects with soft real
 shadows, strong motion (fast attack 0.15–0.35 s, long settle; E.snappy / E.soft / K.pop), motion blur at speed, cuts on

@@ -1,0 +1,37 @@
+{
+ "slug": "loud-one",
+ "title": "3D product film · stations around a mast (LOUD ONE)",
+ "reference": "refs/x_2108372803464692139.mp4",
+ "reference_url": "https://x.com/higgsfield_ai/status/2108372803464692139",
+ "region": null,
+ "analysis": "refs/analysis/loud",
+ "family": "F6",
+ "renderer": "scene3d",
+ "bpm": 120,
+ "duration": 24.0,
+ "fps": 30,
+ "frames": 720,
+ "source_size": [
+  1920,
+  1080
+ ],
+ "tags": [
+  "product",
+  "hardware",
+  "3d",
+  "launch",
+  "led-display",
+  "camera-travel"
+ ],
+ "inputs": [
+  "product name",
+  "the product described physically (shape, colours, 3-5 recognisable parts)",
+  "3 messages of 2-4 words (journey A → B → C)",
+  "tagline",
+  "CTA",
+  "palette"
+ ],
+ "paid_generation": "none",
+ "brief": "brief.md",
+ "note": "paths are relative to the Katana folder; the brief is Higgsfield's own, published with the film"
+}

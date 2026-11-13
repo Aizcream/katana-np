@@ -6,6 +6,25 @@ Videos de motion graphics súper dinámicos al estilo de Higgsfield Katana, pero
 Le das **una referencia** (un video cuyo ritmo y estilo te gusten) y **tus recursos** (tomas, capturas, logo, textos), y Claude
 te devuelve **la misma edición con tu producto como protagonista**, en el formato que quieras (9:16 para Reels por defecto).
 
+## Versión 2: la referencia manda
+
+La primera versión pasaba toda referencia por 69 componentes con un estilo propio, y por eso los videos se parecían a
+Katana NP y no a la referencia. El 13-11-2026 volvimos a leer los documentos del Katana original y medimos seis de sus
+videos de muestra. Tres cambios:
+
+1. **La referencia decide.** Ritmo, tamaños, materiales, cámara y acabado salen de la referencia. Los componentes son
+   una caja de herramientas; cuando no alcanzan, Claude escribe el código de la escena a la medida.
+2. **Primero se muestra.** Antes de construir, Claude te manda un guion detallado (formato `<inputs> <direction>
+   <structure> <build> <gotchas> <start>`), fotos fijas hechas con el motor real, el tiempo estimado y, si hace falta
+   generar video o imágenes con IA, el costo en dólares en dos niveles (barato y fiel). Nada se genera sin tu OK.
+3. **Se compara con la referencia.** `./katana match` pone cada medio segundo de la referencia encima del nuestro. Si
+   nuestro cuadro se ve más vacío, más plano o más lento, no está terminado.
+
+Además: **3D de verdad** (`scene3d`, con three.js: objetos, fichas por miles, pantallas LED, cables, cámara que viaja),
+acabado "fotografiado" tomado de la referencia (`K.lens`) y el guion que Higgsfield publicó para su película 3D
+(`presets/loud-one/`). Los videos de muestra de Higgsfield son código iterado durante 1 a 5 horas cada uno: cuenta con
+ese orden de tiempo para un resultado de ese nivel.
+
 ## Cómo funciona Higgsfield Katana (lo que copiamos)
 
 Katana no es un editor aparte: es una *skill* oculta de Higgsfield que corre **dentro de Claude** a través de su conexión MCP, y
@@ -51,6 +70,7 @@ referencia → análisis → brief (te lo muestra) → recursos → construcció
 Comandos (desde esta carpeta):
 
 ```bash
+./katana refs https://x.com/usuario/status/123   # bajar el video de un post de X a refs/
 ./katana analyze refs/video.mp4                 # desarmar una referencia
 ./katana new mi_reel --format 9x16 --dur 15     # proyecto nuevo
 ./katana clip mi_reel toma.mp4 t1 --from 2 --to 6   # meter una toma (SDR) como secuencia de cuadros
@@ -58,7 +78,8 @@ Comandos (desde esta carpeta):
 ./katana preview mi_reel                         # URL con reproductor en tiempo real
 ./katana render mi_reel --draft                  # borrador en segundos
 ./katana render mi_reel --final                  # final con desenfoque de movimiento (20 s ≈ 4–6 min)
-./katana compare refs/video.mp4 projects/mi_reel/renders/final_*.mp4   # lado a lado con la referencia
+./katana match refs/video.mp4 projects/mi_reel/renders/final_*.mp4     # hojas a los mismos tiempos: referencia arriba, lo nuestro abajo
+./katana compare refs/video.mp4 projects/mi_reel/renders/final_*.mp4   # video lado a lado con la referencia
 ./katana qa projects/mi_reel/renders/final_*.mp4                          # duración, fps, volumen, saltos, hoja de contacto
 ./katana transcribe voz.wav --out projects/mi_reel/assets/voz_words.json  # subtítulos: cada palabra con su tiempo (español)
 ./katana voice say "Tu web tarda demasiado…" --voice <voz> --out projects/mi_reel/assets/voz        # locución ElevenLabs: estima
@@ -74,8 +95,10 @@ Comandos (desde esta carpeta):
   - **Media**: tomas con rampas de velocidad, fotos, stickers recortados, muro 3D, carrusel, abanico, antes/después.
   - **Transiciones**: whip, zoom a través, slice, ráfaga de colores, iris, grid, líquido, cubo, glitch, punch, smear.
   - **Looks**: ascii, glitch VHS, sticker pop, líquido, grid reveal, halftone, duotono, pixelado, RGB split, grade, viñeta, light leaks, badge de esquina.
+  - **3D (`scene3d`)**: escenas reales con three.js: materiales (plástico, arcilla, cromo), miles de objetos a la vez, partículas, pantallas LED de puntos, cables, tarjetas y etiquetas sobre superficies, cámara con recorrido.
 - `engine/demos/`: una página demo por familia (míralas con `./katana gallery engine/demos/type.html 1.6,4.7,7.4`).
-- `presets/`: las 3 referencias de Higgsfield analizadas, con su brief de reconstrucción.
+- `presets/`: referencias analizadas con su guion de reconstrucción (3 de la primera versión y `loud-one`, el guion que publicó Higgsfield).
+- `skills/katana/`: la skill de Claude y sus documentos de método (`references/`: guion, rutas y costos, oficio, control de calidad).
 - `tools/`:
   - el analizador;
   - el capturador;

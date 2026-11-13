@@ -9,6 +9,8 @@
      window.__ready resolves when fonts + preloaded images are decoded. window.__errors() → scene errors.
      window.__cues → {fps, duration, bpm, beatOffset, cuts, hard, cues:[{kind, t, gain, pan, name}], music, voice} for ./katana mix.
      K.voice = {src, at, gain} — a voice-over (e.g. `katana voice say`): mixed on its own bus, music ducks under it.
+     K.lens = {k, ca, bloom, thr, vig, grain, sched:[{from,to,…}]} | false — the photographed finish `katana render --final` applies
+     (tools/lens.py). Set it from what the REFERENCE shows (grain, fringes, bloom, vignette); null = clean unless --lens.
 
    Film = scenes on a timeline. A scene owns a root <div> (RESERVED for transitions: never style it in a scene; build
    inside a child). Scenes overlap through pre/post or through transitions. Kit components (engine/kit/*.js) are
@@ -25,7 +27,7 @@
   const FORMATS = { '9x16': [1080, 1920], '16x9': [1920, 1080], '1x1': [1080, 1080], '4x5': [1080, 1350], '4x3': [1440, 1080] };
   const K = window.K = window.FILM = {
     W: 1080, H: 1920, fps: 30, dur: 15, format: '9x16', scenes: [], errors: [], cuts: [], cues: [], transitions: [], post: [],
-    fonts: [], images: [], CAM: [], BG: null, bpm: 120, beatOffset: 0, music: null, voice: null, theme: {}, kit: {}, trans: {}, looks: {},
+    fonts: [], images: [], CAM: [], BG: null, bpm: 120, beatOffset: 0, music: null, voice: null, lens: null, theme: {}, kit: {}, trans: {}, looks: {},
     nocam: Q.has('nocam'), FORMATS,
   };
 
@@ -349,7 +351,7 @@
     for (const tr of K.transitions) { tr.A = byId[tr.a] || null; tr.B = byId[tr.b] || null; if ((tr.a && !tr.A) || (tr.b && !tr.B)) K.errors.push(`transition ${tr.type || ''}@${tr.at}: unknown scene ${!tr.A ? tr.a : tr.b}`); }
     const hard = K.scenes.filter((s, i) => i > 0 && !s.pre && !K.scenes[i - 1].post && s.t0 > 0 && !K.transitions.some((tr) => Math.abs(tr.at - s.t0) < 1e-3)).map((s) => s.t0);
     window.__cues = { fps: K.fps, duration: K.dur, bpm: K.bpm, beatOffset: K.beatOffset, cuts: K.cuts, hard,
-      transitions: K.transitions.map((tr) => ({ type: tr.type || null, at: tr.at })), cues: K.cues.slice().sort((a, b) => a.t - b.t), music: K.music, voice: K.voice };
+      transitions: K.transitions.map((tr) => ({ type: tr.type || null, at: tr.at })), cues: K.cues.slice().sort((a, b) => a.t - b.t), music: K.music, voice: K.voice, lens: K.lens };
     if (Q.has('guides')) {
       const s = K.safe(), g = K.el('div', `position:absolute;left:${s.left}px;top:${s.top}px;right:${s.right}px;bottom:${s.bottom}px;outline:3px dashed rgba(255,0,90,.85);z-index:98;pointer-events:none`, film);
       K.el('div', 'position:absolute;left:4px;top:4px;font:22px ui-monospace,Menlo;color:rgba(255,0,90,.9)', g, 'safe');

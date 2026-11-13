@@ -34,9 +34,9 @@ underlines, dotted arcs, small paper confetti.
 Type: Bricolage Grotesque 800, tracking −2.5 %, leading 0.98 (the reference's heavy quirky grotesque); small labels in
 Geist Mono caps, tracked +22 %. Big answers 176 px, questions 128 px, sticker words 128 px, labels 22–26 px.
 
-Motion: stickers slap in (scale from 0.35 with 6 % overshoot and a rotation that settles in 0.35 s); type is typed or
-popped word by word; cards drift 1° during holds. Transitions: horizontal whips with the speed peak on the cut, a
-diagonal page peel across the cut inside each question/answer pair, two dives (into the "Hola." bubble and into the
+Motion: stickers slap in (scale from 0.35 with 6 % overshoot and a rotation that settles in 0.35 s) and then never sit
+still (bob, sway); type is typed or popped word by word; cards drift 1° during holds. Transitions: short object whips
+(about 300 px, 3–4 frames each side of the cut), a diagonal page peel that ENDS on the cut inside each question/answer pair, two dives (into the "Hola." bubble and into the
 picked chip) that land farther away and ease in. Recurring motif: a small browser-window sticker (the reference's
 coffee cup). Avoid: kit look (800-weight headline + serif italic), fades, empty holds, anything smaller than the
 reference at the same timecode.
@@ -74,7 +74,7 @@ scrolls deeper; two notes land on it: "título claro", "botón a la vista".
 on a dotted trail, a star, a seal "rápida".
 0:13.97–0:17.70 / FIRMA — field. The North Pearl wordmark lands as an ink speech-bubble sticker (from ×3.2, blurred, in
 0.42 s). "Webs que se entienden a la primera." types by 0:14.97 with an underline; small stickers arrive; teal button
-"Escríbenos" on 0:16.33. Hold 1.3 s with a slow float.
+"Escríbenos" on 0:15.92 (the reference's button frame). Hold 1.8 s: every sticker keeps bobbing, the button pulses.
 </structure>
 
 <build>

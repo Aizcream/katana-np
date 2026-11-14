@@ -13,82 +13,62 @@ size, length and cut frames, because this film is the reference-first test (`./k
 Assets: `assets/img/np_logo_horizontal.svg` (white wordmark, used only on the end card), `assets/img/site_mobile.jpg`
 (the fictional "Aurora Café" demo site, as the phone's screen). Soundtrack: the reference's own track
 (`audio/ref_track.wav`), for comparison only; a published version needs our own music.
-Copy is locked as written in `<structure>`. The Lighthouse numbers are a real case (before 81/87/92/100, after
-94/100/96/100) and are labelled "caso real"; nothing else about the studio is claimed.
-</inputs>
-
-<direction>
-A web page gets one first impression; the film shows what goes into making it a good one, as a deck of notes.
-Journey: SALUDAR → RESPONDER → ENTREGAR.
-
-World: paper and stickers on a flat field. Two fields alternate on the cuts, exactly where the reference alternates
-lime and cream: orange #FF6225 (FIELD) and warm cream #F4EFE6 (PAPER). The reference's pink becomes teal #12B5A6 (POP);
-its black becomes deep blue-teal #10201F (INK); card white is #FFFDF8. No photos except the phone screen, no gradients
-on type, no grain, no vignette: the reference is clean vector with depth from die-cut rings, bevels and soft shadows.
-
-Materials: cards are rounded paper (5 px ink outline, 10 px white die-cut ring, soft drop shadow, a pillow bevel inside),
-stacked two or three deep at ±5°. Every sticker (word, seal, pill, bubble, cursor) has the white ring and a thin ink
-line around it. Seals are scalloped, 14 lobes. Doodles: four-point sparkles, radiating ticks around seals, wavy
-underlines, dotted arcs, small paper confetti.
-
-Type: Bricolage Grotesque 800, tracking −2.5 %, leading 0.98 (the reference's heavy quirky grotesque); small labels in
-Geist Mono caps, tracked +22 %. Big answers 176 px, questions 128 px, sticker words 128 px, labels 22–26 px.
-
-Motion: stickers slap in (scale from 0.35 with 6 % overshoot and a rotation that settles in 0.35 s) and then never sit
-still (bob, sway); type is typed or popped word by word; cards drift 1° during holds. Transitions: short object whips
-(about 300 px, 3–4 frames each side of the cut), a diagonal page peel that ENDS on the cut inside each question/answer pair, two dives (into the "Hola." bubble and into the
-picked chip) that land farther away and ease in. Recurring motif: a small browser-window sticker (the reference's
-coffee cup). Avoid: kit look (800-weight headline + serif italic), fades, empty holds, anything smaller than the
-reference at the same timecode.
-</direction>
-
-<structure>
-0:00.0–0:01.47 / SALUDAR — field. A stack of three cream cards, already in place on frame 0. The top card types
-"Toda web / tiene una primera / impresión." (108 px). An orange tile with a cursor, a teal seal "SEG. 1", a typing
-bubble and two sparkles slap in; the browser sticker sits bottom-left. Last 6 frames: the card leaves down-left with a
-turn while the next one arrives from the right.
-0:01.47–0:02.10 / HOLA — an orange card on the same field; a teal speech bubble "Hola." (150 px) pops with a dotted
-ring and ticks; pill "segundo uno". Dive ×9 into the bubble, still accelerating on the cut.
-0:02.10–0:04.03 / CONSTRUIR — cream. Land at ×0.5 and ease in. Sticker words, left: "Rediseñamos / la tuya / paso a
-paso." with a teal wavy underline. Right: a phone, the site scrolling. Two thin ink rings behind; a teal cursor; tag
-"MÓVIL · WEB". Whip out left.
-0:04.03–0:05.60 / ELEGIR — field. "¿Para qué la *quieres?*" (the last word a slanted teal sticker). Eight chips fill
-the frame: Tienda, Reservas, Catálogo, Portafolio, Blog, Landing, Citas, Menú. A cursor arcs in and clicks "Reservas",
-which turns teal. Dive ×10 into that chip.
-0:05.60–0:06.03 / CLIC — cream. A teal cursor crosses on a dotted arc inside a growing ring. Whip.
-0:06.03–0:07.10 / PREGUNTA 1 — field: white card "CLIENTE — ¿Y carga rápido?". Peel on 0:06.63 to cream: orange card
-"NORTH PEARL · NOTA — De 81 a 94." with underline, label "RENDIMIENTO · LIGHTHOUSE", seal "caso real", a teal check,
-confetti, the browser sticker.
-0:07.10–0:08.03 / PREGUNTA 2 — "¿Me encuentra Google?" → peel on 0:07.60 → "SEO: 100.", label "LIGHTHOUSE · SEO".
-0:08.03–0:09.03 / PREGUNTA 3 — "¿Y en el celular?" → peel on 0:08.60 → "Igual de bien.", label "MÓVIL · TABLET · PC".
-0:09.03–0:10.00 / CÓDIGO — field. A white card types `<h1>Hola, mundo</h1>` in mono under bunting; teal bubble
-"Hecha a medida." Whip.
-0:10.00–0:11.07 / INFORME — a cream ticket: "INFORME · LIGHTHOUSE", "Aprobada." (196 px), "Caso real · 4 de 4 en
-verde", a two-line chart (antes thin, después teal), seal "94", a check, pill "Las cuatro en verde.", stub "CASO REAL ·
-N.º 001". Whip.
-0:11.07–0:12.07 / PORQUÉ — cream. "Cada sección / tiene su / porqué." typed, underline on the last word; the phone
-scrolls deeper; two notes land on it: "título claro", "botón a la vista".
-0:12.07–0:13.03 / ÁLBUM — field. Title "Lo que lleva una buena web"; a board of 14 stamps lands in a wave; pill
-"sin relleno".
-0:13.03–0:13.97 / STACK — cream. An orange pill slides in turning: "NORTH PEARL · STACK — Hecha con Astro."; a cursor
-on a dotted trail, a star, a seal "rápida".
-0:13.97–0:17.70 / FIRMA — field. The North Pearl wordmark lands as an ink speech-bubble sticker (from ×3.2, blurred, in
-0.42 s). "Webs que se entienden a la primera." types by 0:14.97 with an underline; small stickers arrive; teal button
-"Escríbenos" on 0:15.92 (the reference's button frame). Hold 1.8 s: every sticker keeps bobbing, the button pulses.
+Copy is locked as written in `<structure>
+Times are the reference's frames (30 fps); field = orange, paper = cream.
+f0–36 / SALUDAR — field. A stack of three cream cards, in place on frame 0. "Toda web / tiene una primera /
+impresión." typed (108 px). Tile with a cursor, seal "SEG. 1" with ticks, typing bubble, sparkles; the right sheet
+slides out with a "ñ" sticker (f24–36). Browser sticker bottom-left.
+f36–46 / GIRO — the top card turns over about its vertical axis (anticipation, turn f38–41, overshoot, settle); its
+back is the orange card; field swaps to paper under it at f38.
+f46–63 / HOLA — "Hola." bubble pops (f46) with a turning dashed ring and ticks; pill "segundo uno" (f53); arrow doodle.
+f61–121 / CONSTRUIR — opens through a ring from the bubble (f61–65); the bubble is carried and thrown out on an arc.
+Field. Sticker words land on f61, 66, 68, 69.5, 70, 72: "Rediseñamos / la tuya / paso a paso."; underline f76–81.
+Phone slides in (f63–68), the site scrolls; "¡Así sí!" (f82), "Perfecta." (f114). Field floods to paper from the
+phone's foot (f98–104). Browser sticker with ticks (f110).
+f121–168 / ELEGIR — enters behind a slanted edge (f121–124). "¿Para qué la" typed (f128–131), "quieres?" lands from
+large (f132). Eight chips; a sticker slams onto each, one every 4 frames (f131–161). "Reservas" (teal) lifts a corner
+(f163–165) and is carried to the centre.
+f166–181 / CLIC — opens through a rounded box (f166–170). The chip morphs into the cursor (f169–172), which loops on a
+dotted trail and dives at a target (f172–181).
+f181–213 / PREGUNTA 1 — "¿Y carga rápido?" tumbles in on paper; paper floods to field (f184–188); the card peels
+(f192.5–199) to "De 81 a 94." (label RENDIMIENTO · LIGHTHOUSE, seal "caso real", check, confetti, back sheets).
+f213–241 / PREGUNTA 2 — "¿Me encuentra Google?" arrives from the right; peels (f223.5–230) to "SEO: 100.".
+f241–271 / PREGUNTA 3 — "¿Y en el celular?" tumbles in; paper floods to field (f243–248); peels (f252.5–259) to
+"Igual de bien." (label MÓVIL · TABLET · PC).
+f271–300 / CÓDIGO — a white card enters from the left, the field floods from that side; `<h1>Hola, mundo</h1>` typed;
+bunting; bubble "Hecha a medida."; thrown left while a cursor crosses (f291–299).
+f300–332 / INFORME — the ticket swings in (f300–306): "INFORME · LIGHTHOUSE", "Aprobada.", "Caso real · 4 de 4 en
+verde", chart antes/después (f304–309), seal "94" spins in, pill "Las cuatro en verde." arrives as a smear (f311–313),
+check sticker (f319).
+f331–362 / PORQUÉ — opens through concentric rings from the check. "Cada sección / tiene su / porqué." typed; on the
+phone a teal sticker pops and peels off (f346–353) to show "título claro"; "botón a la vista" (f355); a bubble pops (f359).
+f361–391 / ÁLBUM — opens through a rounded box from that bubble. "Lo que lleva una buena web" typed; eleven stamps in
+the album, three slam in (f368, 371, 379); pill "sin relleno" unrolls (f382–388).
+f390–419 / STACK — enters behind a slanted edge. Orange pill "NORTH PEARL · STACK — Hecha con Astro." swings in and
+overshoots; a small cursor flies a dashed loop and lands in it (f392–405); star, sparkle and seal "rápida" pop; the
+icon closes into a ring.
+f419–531 / FIRMA — one clean field frame; the North Pearl wordmark lands as an ink speech-bubble sticker with two
+outline echoes and ticks; the logo is centred in the bubble and the second bubble sits behind it, clear of the logo.
+"Webs que se entienden a la primera." typed (f429–446), underline; small stickers (f458–466); teal button
+"Escríbenos" lands on f479. Hold: everything keeps bobbing, the button pulses.
 </structure>
 
 <build>
 1. One file, `film/film.js`; constants first (palette `C`, cut times `T` = the reference's cut frames, all copy in `COPY`).
-2. Bespoke builders in the film (card, seal, pill, bubble, squiggle, ticks, cursor, phone, confetti); the kit is not
-   used. Die-cut rings come from two SVG filters (blur + alpha threshold = round dilate), never `-webkit-text-stroke`.
-3. `K.BG` switches field and paper on the cut frames; scenes never fade.
-4. Every element is a pure function of scene-local time; confetti is closed-form from a seed.
-5. The peel is a diagonal half-plane clip of both cards plus a curled sheet riding on the line (6 frames).
+2. Bespoke builders in the film (card, seal, pill, bubble, squiggle, ticks, cursor, phone, confetti) plus `K.anim`
+   (peel, flip, morph, flood, iris, slam, pop, ghostType). Die-cut rings come from two SVG filters (blur + alpha
+   threshold = round dilate), never `-webkit-text-stroke`.
+3. Every scene paints its own background (floods and irises need layers); `K.BG` stays constant. Scenes that open
+   through an iris have `pre`, the ones under them `post`.
+4. Every element is a pure function of time; times are written as reference frames through `F()`.
+5. Question cards are sticker layers over the answer: `K.anim.peel` clips the sticker along the fold and lays its
+   mirrored back over it (6.5 frames).
 6. `K.lens = false` (clean reference). Final with `--mb 8`.
 7. Deliver the MP4, the match pages and the gate log.
 </build>
 
 <gotchas>
+The reference was first rebuilt from its overview sheet and came out as slides and whips (v1–v6): read every page.
 The first frame is already a composed pose: the reference never opens on an empty field.
 Holds are 8–11 frames inside the question/answer pairs: two lines of copy at most, big.
 Nothing is smaller than its counterpart in the reference at the same timecode (chips, board and cards fill the frame).
@@ -98,6 +78,7 @@ The reference's track is for comparison only.
 </gotchas>
 
 <start>
-Stills of the hold poses → draft → `./katana match` against the reference → fix what is emptier, later or smaller →
-final with motion blur → gate log.
+Read every page of the reference and write `events.md` → stills of the hold poses AND of each device mid-way (turn,
+peel, morph, flood, iris) → `./katana match` against the reference, asking "same device?" for every pair → final with
+motion blur → gate log.
 </start>

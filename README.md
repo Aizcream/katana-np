@@ -20,6 +20,12 @@ videos de muestra. Tres cambios:
 3. **Se compara con la referencia.** `./katana match` pone cada medio segundo de la referencia encima del nuestro. Si
    nuestro cuadro se ve más vacío, más plano o más lento, no está terminado.
 
+**Animación de verdad, no solo movimientos** (`K.anim`): calcomanías que se despegan doblándose, tarjetas que giran en
+perspectiva, una forma que se transforma en otra (morph), fondos que se inundan desde donde ocurre la acción, escenas
+que se abren por un anillo, sellos que caen de golpe, y los principios de animación (anticipación, estirar y aplastar,
+arcos, acción secundaria) como funciones. Antes de construir, Claude lee la referencia cuadro a cuadro y anota qué
+recurso usa cada evento.
+
 Además: **3D de verdad** (`scene3d`, con three.js: objetos, fichas por miles, pantallas LED, cables, cámara que viaja),
 acabado "fotografiado" tomado de la referencia (`K.lens`) y el guion que Higgsfield publicó para su película 3D
 (`presets/loud-one/`). Los videos de muestra de Higgsfield son código iterado durante 1 a 5 horas cada uno: cuenta con

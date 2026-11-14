@@ -38,7 +38,8 @@ identical timecodes. Its showcase films are code, iterated for one to five hours
 | `routes-costs.md` | deciding what is code vs generated; quoting; spending (providers, price table, rules) |
 | `craft.md` | building: cut grammar, the numbers that passed, rhythm, density, type, photographed look, 3D, characters |
 | `qa.md` | rendering a draft or a final: the gate and what "matches the reference" means |
-| `$KR/engine/kit/docs/<family>.md` | using a component (`type`, `ui`, `media`, `transitions`, `looks`, `scene3d`) |
+| `$KR/engine/kit/docs/<family>.md` | using a component (`anim`, `scene3d`, `type`, `ui`, `media`, `transitions`, `looks`) |
+| `$KR/engine/kit/docs/anim.md` | ALWAYS before building: peel, flip, morph, flood, iris, slam, and the principles of animation as functions |
 | `$KR/presets/<slug>/brief.md` | reusing an analysed reference (`loud-one` is Higgsfield's own published brief) |
 
 ## Layout
@@ -46,7 +47,7 @@ identical timecodes. Its showcase films are code, iterated for one to five hours
 |---|---|
 | `katana` | CLI: refs · analyze · new · clip · stills · preview · render · mix · match · compare · energy · sheet · qa · gallery · renderpage · transcribe · voice |
 | `engine/katana.js` | core (global `K`): timeline, scenes, beat grid, easing, transitions registry, safe zones, preview player, cues, `K.lens` |
-| `engine/kit/{type,ui,media,transitions,looks,scene3d}.js` | components and helpers; contract in `engine/kit/CONTRACT.md` |
+| `engine/kit/{anim,type,ui,media,transitions,looks,scene3d}.js` | components and helpers; contract in `engine/kit/CONTRACT.md` |
 | `engine/vendor/` | three.js bundle for `scene3d` (local, no network) |
 | `engine/demos/*.html` | one demo page per family (`./katana gallery engine/demos/type.html 1,2,3`) |
 | `tools/` | analyze_ref.py · energy.py · match.py · compare.py · capture.mjs/cdp.mjs (frame capture, `--mb`) · lens.py · mix.py · bin/ocr · bin/cutout |
@@ -63,7 +64,15 @@ identical timecodes. Its showcase films are code, iterated for one to five hours
 1. **Take the reference apart.** `./katana refs <x url>` or the file in `entrada/`, then `./katana analyze ref.mp4
    [--region top]` (split-screen comparison posts: the half that is the reference).
    - `sheet.jpg` + `timeline.png` for structure, then **every page in `pages/`, in order** (every frame at native fps).
-     Detectors only propose: correct the cut list by eye (cuts hide inside whips, burns and flashes).
+     This is a gate, not advice: the first test of this method skipped the pages, built from the overview sheet, and
+     missed a card turning over, stickers peeling, a chip morphing into a plane and a background colour — while every
+     automatic check stayed green. Do not write a brief or a line of film code until every page has been read.
+   - While reading, write `refs/analysis/<ref>/events.md`: one line per event with its FRAME numbers and its TYPE —
+     what bends, turns, morphs, peels, floods, lands, is typed, is carried across a cut. Name the device, not the
+     impression ("f193–199 sticker peel from the top-left corner, back of the sticker white, flies off right", not
+     "transition"). Enlarge the frames of anything you cannot name (`ffmpeg -vf "select='between(n,A,B)',tile=3x3"`).
+   - Detectors only propose: correct the cut list by eye (cuts hide inside whips, burns and flashes), and remember a
+     detected cut is usually where a transition ENDS.
    - Write the **trick line** first: "The trick of this ref is <device> on <timing> so that <what the viewer feels>".
    - Fill `breakdown.json` while reading: per shot its content and role, transitions with frames, every text event
      (frame in / full / out, size, face class, animation), layers, palette.
@@ -91,7 +100,9 @@ identical timecodes. Its showcase films are code, iterated for one to five hours
    K.beatOffset` from the reference, `K.theme`, `K.lens`, scenes `K.scene({id, t0, t1, build(root, add), update(lt)})`,
    transitions `K.trans.*`, SFX `K.cue(kind, t)`, `K.start({format, fps, dur})`. Blocking pass first (final timing and
    camera, flat look), then materials, type detail and sound. One persistent hero object; something new every
-   0.5–0.6 s; holds long enough to read.
+   0.5–0.6 s; holds long enough to read. Each event in `events.md` is built with the device the reference uses
+   (`engine/kit/docs/anim.md`: "pick by what the reference does"); write times as the reference's frames, `F(193)`.
+   Things animate, they do not just move: squash and stretch, anticipation, follow-through, arcs, secondary action.
 8. **Look early and often.** `./katana stills` (2-frame steps around every cut), `./katana preview <p>` (realtime
    player URL for the browser pane), `./katana render <p> --draft` (20 s of 9:16 ≈ 30–60 s).
 9. **Final + gate** (`references/qa.md`). `./katana render <p> --final [--mb 8] [--name x]` applies sub-frame motion blur
@@ -101,6 +112,11 @@ identical timecodes. Its showcase films are code, iterated for one to five hours
     the quote, remaining flaws with timecodes. Revisions change only what was named.
 
 ## Kit at a glance (API in `engine/kit/docs/<family>.md`; read before using)
+- **anim** (animation that is more than a transform): `peel` (a sticker folds over itself and leaves) · `flip` (a
+  two-faced body turning in perspective) · `morph` (one outline becomes another) · `flood` (the background changes from
+  the action point) · `iris` (the next scene opens through a ring or rounded box, one object carried across) · `slamTo`
+  (dropped from the camera, squash on the hit) · `pop` (squash, stretch, late rotation) · `ghostType` · `anticipate` ·
+  `follow` · `arc`. A slide, whip or zoom is the LAST choice: use it only where the reference does.
 - **type**: `words` (word by word: `*serif em*`, `{accent}…{/}`, `{box}`, `[img:src]` pills; enters pop/rise/blur/slide/
   drop/type/scatter) · `headline` · `ghost` · `morph` · `letterSwap` · `typeOn` · `stickerWords` · `captions` · `counter` · `sliced`.
 - **ui**: `phone` · `browser` · `laptop` · `searchBar` · `cursor` · `chip` · `chipCloud` · `card` · `ticker` · `badge` ·
@@ -127,6 +143,8 @@ identical timecodes. Its showcase films are code, iterated for one to five hours
 - Copy in Spanish with correct accents and ¿¡, final in the brief, checked at phone size. 9:16 safe zones: top 220,
   bottom 420, right 130 px (`K.safe()`, `?guides=1`).
 - A remix is a new film in the reference's language: never the reference's brand, logo, product name or footage.
+- Matching the cut frames is not matching the film. If the reference peels, turns, morphs or floods and ours slides,
+  it is wrong even with every number green: the gate includes naming each transition's device next to the reference's.
 - Never draw another company's logo; never invent facts or numbers about the user's product.
 - Spending: nothing is generated without a quote in USD and an explicit OK for those jobs (`references/routes-costs.md`).
   Credentials never appear in files, commands shown to the user, or logs.

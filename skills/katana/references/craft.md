@@ -124,6 +124,24 @@ Each of these looked fine on our own stills and was only caught by `./katana mat
 - **Nothing smaller than its counterpart.** Chips, boards and cards had to grow 20–40 % to fill the frame as the
   reference does.
 
+## 7c. Animate, do not just move (np_salu v7, after the user's review of v6)
+
+v6 matched the reference's cut frames, energy and dead-air numbers and was still rejected in one look: "the original
+peels like a sticker, the card turns 360, ours just swaps". Every transition had become a slide, whip or zoom.
+
+- **Name the device of every event** in `events.md` before building, from the every-frame pages, and build that device
+  (`engine/kit/docs/anim.md`): peel, flip, morph, flood, iris with a carried object, slam, typed ghost text.
+- **The twelve principles are the checklist** for anything that appears or leaves: squash and stretch, anticipation,
+  staging, follow-through and overlap, slow in / slow out, arcs, secondary action, timing, exaggeration, solid drawing,
+  appeal (the table in `anim.md` maps each to a function).
+- **Backgrounds are objects too:** in the reference they flooded from the action point or swapped under a turning card;
+  they never just cut.
+- **Carry something across every scene change** (the bubble through the ring, the chip into the cursor), then get rid
+  of it with an action (thrown on an arc, morphed, landed).
+- **Entrances come from the camera or from an object**, not from the frame edge: cards tumble in rotating, stamps fall
+  from 2× size, a ticket swings in like a door.
+- Numbers cannot see this. The match pages can, but only if you read them asking "is it the same DEVICE?".
+
 ## 8. Characters
 
 Idle amplitude about twice what looks right in a still; each character has a motion signature (frequency, squash,

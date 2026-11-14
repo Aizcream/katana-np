@@ -67,6 +67,12 @@ K.trans.name = ({ at, a, b, dur = .4, ...opts }) => K.transition({ type: 'name',
 - Global looks: `K.looks.name({ … })` registers `K.addPost(fn)` overlays (vignette, scanlines, light leaks, corner badge,
   colour wash) or sets a filter on `K.world` (grade). Document which kind each look is.
 
+## anim (anim.js — full API in `docs/anim.md`)
+Primitives for animation that changes a thing instead of moving it: `peel`, `flip`, `morph`, `flood`, `iris`, `slam`,
+`pop`, `ghostType` and the principles as functions. All are pure functions of the value passed in. `peel` and `iris`
+own the `clip-path` of the element they are given; `flip` needs no flattening ancestor (`overflow`, `filter`) between
+its stage and the scene root. Prefer these over `K.trans.*` whenever the reference bends, turns, morphs or floods.
+
 ## scene3d (scene3d.js, real 3D on three.js — full API in `docs/scene3d.md`)
 - `K.kit.scene3d(parent, { bg, env, lights, fov, dof, camera: [keys], build(ctx), frame(lt, ctx, state) })` follows the
   component contract; `frame` is a PURE function of `lt` (set positions, never increment). One shared WebGL renderer

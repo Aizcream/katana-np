@@ -17,6 +17,7 @@
 #   katana energy <video> [--region top] [--vs ref/energy.json]       energía (cámara, sacudidas, destellos, cortes) vs la referencia
 #   katana transcribe <media> [--out words.json] [--srt f.srt]        tiempos por palabra (español, whisper.cpp) para subtítulos
 #   katana voice check|voices|library|add|say …                       locución ElevenLabs + tiempos exactos (siempre estima primero)
+#   katana remotion <proyecto> <composición> <id> [--dir carpeta Remotion] [--props JSON]   escena de Remotion/snapcn → toma lista para la película
 #   katana refs [x.com/…/status/ID]                                   descarga + analiza las referencias de los presets (o un video de X)
 #   katana doctor [--fast] · keys elevenlabs|higgsfield|status · update · version     instalación y mantenimiento
 set -euo pipefail
@@ -112,6 +113,18 @@ hold poses, time and cost estimate; wait for the OK. 3. Blocking pass. 4. Materi
 </start>
 EOF
     echo "proyecto nuevo: $P  ($fmt, $fps fps, $dur s)"; printf '  edita %s/film/film.js · vista previa: ./katana preview %q · render: ./katana render %q --draft\n' "$P" "$name" "$name" ;;
+
+  remotion)     # a Remotion composition (e.g. a snapcn scene) rendered natively and brought in as a clip: katana remotion <project> <composition> <id> [--dir <remotion project>] [--props '{"k":"v"}']
+    [[ $# -ge 3 ]] || die "usage: katana remotion <project> <composition> <id> [--dir <remotion project>] [--props JSON]"
+    P=$(proj_dir "$1"); comp="$2"; id="$3"; shift 3
+    rdir=$(opt --dir "$(cat "${KATANA_CONFIG_DIR:-$HOME/.config/katana}/remotion_home" 2>/dev/null || true)" "$@"); props=$(opt --props "" "$@")
+    [[ -n "$rdir" && -f "$rdir/package.json" ]] || die "no sé dónde está el proyecto de Remotion: pásalo con --dir <carpeta> (se recuerda para la próxima vez)"
+    mkdir -p "${KATANA_CONFIG_DIR:-$HOME/.config/katana}"; (cd "$rdir" && pwd) > "${KATANA_CONFIG_DIR:-$HOME/.config/katana}/remotion_home"
+    tmp=$(mktemp -d "${TMPDIR:-/tmp}/kremotion.XXXXXX"); ra=(render "$comp" "$tmp/$id.mp4" --codec=h264 --crf=5 --pixel-format=yuv444p --log=error)   # near-lossless; the project's own CRF/codec config does not matter
+    [[ -n "$props" ]] && ra+=(--props="$props")
+    echo "remotion: $comp en $rdir"; (cd "$rdir" && npx remotion "${ra[@]}") || die "Remotion no pudo renderizar '$comp' (¿existe esa composición? npx remotion compositions)"
+    hh=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of default=nw=1:nk=1 "$tmp/$id.mp4" | head -1)
+    "$0" clip "$P" "$tmp/$id.mp4" "$id" --h "$hh" --q 2; rm -rf "$tmp" ;;
 
   clip)
     [[ $# -ge 3 ]] || die "usage: katana clip <project> <video> <id> [--from s] [--to s] [--h 1920] [--q 3]"
@@ -281,6 +294,6 @@ EOF
     "$0" sheet "$v" ;;
 
   help|-h|--help)
-    sed -n 2,22p "$0" | sed 's/^# \{0,1\}//' ;;
+    sed -n 2,23p "$0" | sed 's/^# \{0,1\}//' ;;
   *) echo "katana: comando desconocido '$cmd' (lista: ./katana help)" >&2; exit 2 ;;
 esac

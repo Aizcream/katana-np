@@ -26,6 +26,11 @@ que se abren por un anillo, sellos que caen de golpe, y los principios de animac
 arcos, acción secundaria) como funciones. Antes de construir, Claude lee la referencia cuadro a cuadro y anota qué
 recurso usa cada evento.
 
+**Escenas ya hechas de snapcn / Remotion**: cuando una escena lista encaja (cierre con logo, títulos, gráficos), se
+usa tal cual en Remotion y entra a la película con `./katana remotion <proyecto> <composición> <id>`; Katana pone encima
+sus animaciones, el control contra la referencia y el sonido. La comparación de motores está en
+`skills/katana/references/engines.md`.
+
 Además: **3D de verdad** (`scene3d`, con three.js: objetos, fichas por miles, pantallas LED, cables, cámara que viaja),
 acabado "fotografiado" tomado de la referencia (`K.lens`) y el guion que Higgsfield publicó para su película 3D
 (`presets/loud-one/`). Los videos de muestra de Higgsfield son código iterado durante 1 a 5 horas cada uno: cuenta con

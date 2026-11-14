@@ -41,11 +41,12 @@ identical timecodes. Its showcase films are code, iterated for one to five hours
 | `$KR/engine/kit/docs/<family>.md` | using a component (`anim`, `scene3d`, `type`, `ui`, `media`, `transitions`, `looks`) |
 | `$KR/engine/kit/docs/anim.md` | ALWAYS before building: peel, flip, morph, flood, iris, slam, and the principles of animation as functions |
 | `$KR/presets/<slug>/brief.md` | reusing an analysed reference (`loud-one` is Higgsfield's own published brief) |
+| `references/engines.md` | the brief calls for a ready-made scene (logo lockup, text reveal, announce title, chart, device shot) or the user mentions snapcn, Remotion or HyperFrames |
 
 ## Layout
 | Path | What |
 |---|---|
-| `katana` | CLI: refs · analyze · new · clip · stills · preview · render · mix · match · compare · energy · sheet · qa · gallery · renderpage · transcribe · voice |
+| `katana` | CLI: refs · analyze · new · clip · remotion · stills · preview · render · mix · match · compare · energy · sheet · qa · gallery · renderpage · transcribe · voice |
 | `engine/katana.js` | core (global `K`): timeline, scenes, beat grid, easing, transitions registry, safe zones, preview player, cues, `K.lens` |
 | `engine/kit/{anim,type,ui,media,transitions,looks,scene3d}.js` | components and helpers; contract in `engine/kit/CONTRACT.md` |
 | `engine/vendor/` | three.js bundle for `scene3d` (local, no network) |
@@ -92,6 +93,8 @@ identical timecodes. Its showcase films are code, iterated for one to five hours
    the stills sheet, the time estimate, the cost quote. **Wait for the OK.** First visible result within about 15
    minutes of starting.
 6. **Assets.** Footage → `./katana clip <p> <video> <id> --from s --to s` (HDR iPhone footage must be SDR first).
+   A ready-made Remotion / snapcn scene → `./katana remotion <p> <composition> <id>` (renders it natively and brings it
+   in as a clip, about 10 s; see `references/engines.md`).
    Cut-outs → `tools/bin/cutout in.jpg out.png --crop`. Speech → `./katana transcribe <media> --out
    projects/<p>/assets/voice_words.json` then `K.kit.captions`. Voice-over → `./katana voice say "<guion>" --voice <id>
    --out projects/<p>/assets/voz` (estimates first; `--yes` generates voz.wav + exact word timings; `K.voice = {src}`).

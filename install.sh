@@ -116,15 +116,22 @@ if [[ $NO_WHISPER == 0 ]]; then
   dl https://huggingface.co/ggml-org/whisper-vad/resolve/main/ggml-silero-v5.1.2.bin models/ggml-silero-v5.1.2.bin 29940d98d42b91fbd05ce489f3ecf7c72f0a42f027e4875919a28fb4c04ea2cf
 else warn "omitido (--no-whisper): 'katana transcribe' no estará disponible"; fi
 
-# ---------------------------------------------------------------- 7. skill /katana para Claude Code
-step "7/8 Skill /katana para Claude Code"
+# ---------------------------------------------------------------- 7. skill /katana para Claude Code, Antigravity y otros agentes
+step "7/8 Skill /katana y reglas para agentes de IA"
 mkdir -p "$SKILLS_DIR" "$CONFIG_DIR" projects refs entrada
 printf '%s\n' "$KROOT" > "$CONFIG_DIR/home"
-link_skill() {  # link_skill <name>
-  local src="$KROOT/skills/$1" dst="$SKILLS_DIR/$1"
+link_skill_to() {  # link_skill_to <name> <target_dir>
+  local src="$KROOT/skills/$1" dst="$2/$1"
+  mkdir -p "$2"
   if [[ -L "$dst" ]]; then rm "$dst"
-  elif [[ -e "$dst" ]]; then local bk="$CONFIG_DIR/backup"; mkdir -p "$bk"; mv "$dst" "$bk/$1-$(date +%Y%m%d%H%M%S)"; warn "había una skill '$1' propia: la guardé en $bk (fuera de las skills, para que Claude no cargue dos)"; fi
-  ln -s "$src" "$dst" && ok "/$1 → $src"
+  elif [[ -e "$dst" ]]; then local bk="$CONFIG_DIR/backup"; mkdir -p "$bk"; mv "$dst" "$bk/$1-$(date +%Y%m%d%H%M%S)"; warn "había una skill '$1' propia en $2: la guardé en $bk"; fi
+  ln -s "$src" "$dst" && ok "/$1 → $dst"
+}
+link_skill() {
+  link_skill_to "$1" "$SKILLS_DIR"
+  [[ -d "$HOME/.gemini/antigravity" && "$SKILLS_DIR" == "$HOME/.claude/skills" ]] && link_skill_to "$1" "$HOME/.gemini/antigravity/skills"
+  [[ -d "$HOME/.codex" && "$SKILLS_DIR" == "$HOME/.claude/skills" ]] && link_skill_to "$1" "$HOME/.codex/skills"
+  return 0
 }
 link_skill katana
 [[ $WITH_HF == 1 ]] && link_skill higgsfield-api

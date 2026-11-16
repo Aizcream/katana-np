@@ -232,8 +232,8 @@
     const own = def.update, ownPrep = def.prepare;
     def.comps = def.comps || [];
     def.add = (c) => { def.comps.push(c); return c; };
-    def.prepare = async (lt, t, root) => { if (ownPrep) await ownPrep(lt, t, root); const ps = []; for (const c of def.comps) if (c.prepare) ps.push(c.prepare(lt)); if (ps.length) await Promise.all(ps); };
-    def.update = (lt, t, root) => { for (const c of def.comps) c.update(lt); if (own) own(lt, t, root); };
+    def.prepare = async (lt, t, root) => { if (ownPrep) await ownPrep.call(def, lt, t, root); const ps = []; for (const c of def.comps) if (c.prepare) ps.push(c.prepare(lt)); if (ps.length) await Promise.all(ps); };
+    def.update = (lt, t, root) => { for (const c of def.comps) c.update(lt); if (own) own.call(def, lt, t, root); };
     K.scenes.push(def); return def;
   };
   K.cue = (kind, t, opts = {}) => K.cues.push({ kind, t: +(+t).toFixed(4), gain: opts.gain ?? 1, pan: opts.pan ?? 0, name: opts.name || null, dur: opts.dur || null });

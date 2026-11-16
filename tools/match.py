@@ -34,8 +34,8 @@ def crop_filter(region, W, H):
 
 def grab(path, t, w, crop, out):
     """One frame at time t (seek to the frame that is on screen at t), scaled to width w."""
-    vf = ','.join(f for f in [crop, f'scale={w}:-2:flags=lanczos'] if f)
-    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', f'{max(0, t):.4f}', '-i', path, '-frames:v', '1', '-vf', vf, '-q:v', '3', out], check=False)
+    vf = ','.join(f for f in [crop, f'scale={w}:-2:flags=lanczos:out_range=pc'] if f)
+    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', f'{max(0, t):.4f}', '-i', path, '-frames:v', '1', '-vf', vf, '-strict', 'unofficial', '-q:v', '3', out], check=False)
     return Image.open(out).convert('RGB') if os.path.exists(out) else None
 
 

@@ -10,6 +10,7 @@ refs/*.mp4
 refs/*.json
 refs/sheets/
 refs/analysis/
+refs/*_analysis/
 *.part
 elevenlabs-ledger.jsonl
 hf-ledger.jsonl

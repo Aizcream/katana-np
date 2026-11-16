@@ -34,6 +34,16 @@ repair passes per version, then ship with the remaining flaws listed honestly, w
 Run them on the plan (before building), on the draft and on the final. Reuse what still holds. Keeping a good decision
 unchanged is a valid result; do not invent three changes to justify three reviews.
 
+## Pairs at a readable size (when the film keeps the reference's timing)
+
+`match` pages are for the whole film; they are too small to judge an entrance. For every stretch where something enters,
+leaves, is typed or beats: `./katana closeup frames <ours.mp4> <dir>` then `./katana closeup pairs <ref full dir> <dir>
+out.jpg f1,f2,…` (the reference above ours, same frame numbers, 384 px a frame) and read them. Then check the numbers the
+native-size pass produced, on OUR render, with the same tool: the big words' widths frame by frame (`closeup box`), the
+hero object's position and size (`closeup blobs`), the captions' left edge and height (`closeup text`). The gate log
+carries those numbers next to the reference's. np_puntos v5: word pop 1.130 · 1.040 · 1 against 1.129 · 1.038 · 1;
+hero dot within 2 px of the reference on every sampled frame of the first scene.
+
 ## What "matches the reference" means
 
 A remix is a new film in the reference's language: the user's product, copy and identity; the reference's rhythm,

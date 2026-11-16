@@ -72,6 +72,16 @@ identical timecodes. Its showcase films are code, iterated for one to five hours
      what bends, turns, morphs, peels, floods, lands, is typed, is carried across a cut. Name the device, not the
      impression ("f193–199 sticker peel from the top-left corner, back of the sticker white, flies off right", not
      "transition"). Enlarge the frames of anything you cannot name (`ffmpeg -vf "select='between(n,A,B)',tile=3x3"`).
+   - **Native-size pass — also a gate.** The pages show a frame about 200 px wide: enough for structure, blind to
+     everything that makes motion feel designed. np_puntos read all 599 pages and still built words that cut in (the
+     reference lands them 13 % too big and settles in three frames), a hero dot that stood still (it beats every half
+     beat and shrinks before the click), a solid phone outline (dotted), a normal font (pixel type), a zoom-out (a
+     cut). So, before the brief: `./katana closeup frames <ref> refs/analysis/<ref>/full [--crop …]`, then
+     `closeup sheet` over every stretch where something enters, leaves or is typed (20 frames a sheet, 480 px a
+     frame), `closeup text` for all type (what is on screen each frame, its box: size, position, typing cadence,
+     whether the left edge is fixed), `closeup box` for every big word (its scale curve) and `closeup blobs` for the
+     hero object and every solid shape (position and size per frame: pulses, drops, settles, anticipation).
+     Write the numbers into `refs/analysis/<ref>/native_pass.md` as per-frame tables.
    - Detectors only propose: correct the cut list by eye (cuts hide inside whips, burns and flashes), and remember a
      detected cut is usually where a transition ENDS.
    - Write the **trick line** first: "The trick of this ref is <device> on <timing> so that <what the viewer feels>".
@@ -105,6 +115,9 @@ identical timecodes. Its showcase films are code, iterated for one to five hours
    camera, flat look), then materials, type detail and sound. One persistent hero object; something new every
    0.5–0.6 s; holds long enough to read. Each event in `events.md` is built with the device the reference uses
    (`engine/kit/docs/anim.md`: "pick by what the reference does"); write times as the reference's frames, `F(193)`.
+   Where the native-size pass measured a curve (a pop, a settle, a pulse, a camera step), put the reference's own
+   per-frame table in the film (`PT.tab`-style lookup), not an easing that looks similar: a one-frame overshoot of
+   1.13 → 1.04 → 1 is not "pop with back ease".
    Things animate, they do not just move: squash and stretch, anticipation, follow-through, arcs, secondary action.
 8. **Look early and often.** `./katana stills` (2-frame steps around every cut), `./katana preview <p>` (realtime
    player URL for the browser pane), `./katana render <p> --draft` (20 s of 9:16 ≈ 30–60 s).

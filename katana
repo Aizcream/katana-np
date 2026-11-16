@@ -11,6 +11,7 @@
 #   katana compare <ref.mp4> <nuestro.mp4> [--region top]             lado a lado con etiquetas
 #   katana match <ref.mp4> <nuestro.mp4> [--every 0.5] [--region top]  hojas a los MISMOS tiempos: referencia arriba, lo nuestro abajo
 #   katana sheet <video> [--fps 2] [--from s --to s]                  hoja de contacto con tiempos
+#   katana closeup frames|sheet|pairs|text|box|blobs …                 LUPA: leer y MEDIR la referencia a tamaño real, cuadro a cuadro
 #   katana qa <video>                                                 duración, fps, volumen, saltos/congelados, hoja
 #   katana gallery <demo.html> <t1,t2,…>                              fotos de una página demo del kit (engine/demos)
 #   katana renderpage <page.html> <out.mp4> [--mb N]                  cualquier página __seek → MP4 (sin sonido)
@@ -136,7 +137,7 @@ EOF
     fpsr=$(ffprobe -v error -select_streams v:0 -show_entries stream=avg_frame_rate -of default=nw=1:nk=1 "$src" | head -1)
     [[ "$trc" == "arib-std-b67" || "$trc" == "smpte2084" ]] && echo "katana clip: WARNING $src is HDR ($trc) — convert to SDR first (Rec.709), colours will look flat/washed" >&2
     args=(-v error -y -ss "$from" -i "$src"); [[ -n "$to" ]] && args+=(-t "$("$PY" -c "print(max(0.04, $to - $from))")")
-    ffmpeg "${args[@]}" -vf "scale=-2:$h:flags=lanczos" -q:v "$q" -start_number 0 "$D/f_%04d.jpg"
+    ffmpeg "${args[@]}" -vf "scale=-2:$h:flags=lanczos:out_range=pc" -strict unofficial -q:v "$q" -start_number 0 "$D/f_%04d.jpg"
     n=$(ls "$D" | grep -c '^f_')
     "$PY" - "$D" "$fpsr" "$n" "$src" "$from" <<'EOF'
 import sys, json
@@ -275,13 +276,17 @@ EOF
     [[ $# -ge 2 ]] || die "usage: katana match <ref.mp4> <ours.mp4> [--every 0.5] [--from s] [--to s] [--region top] [--offset s] [--out DIR]"
     "$PY" "$T/match.py" "$@" ;;
 
+  closeup)      # native-size reading and measuring of a reference (frames · sheet · pairs · text · box · blobs): see tools/closeup.py
+    [[ $# -ge 1 ]] || die "usage: katana closeup frames|sheet|pairs|text|box|blobs … (python3 tools/closeup.py -h)"
+    "$PY" "$T/closeup.py" "$@" ;;
+
   sheet)
     [[ $# -ge 1 ]] || die "usage: katana sheet <video> [--fps 2] [--out f.jpg] [--w 270] [--cols 8] [--from s] [--to s]"
     v="$1"; shift; f=$(opt --fps 2 "$@"); out=$(opt --out "${v%.*}_sheet.jpg" "$@"); w=$(opt --w 270 "$@"); cols=$(opt --cols 8 "$@")
     sfrom=$(opt --from 0 "$@"); sto=$(opt --to "" "$@")
     tmp=$(mktemp -d "${TMPDIR:-/tmp}/ksheet.XXXXXX")
     seg=(-ss "$sfrom"); [[ -n "$sto" ]] && seg+=(-to "$sto")
-    ffmpeg -v error -y "${seg[@]}" -i "$v" -vf "fps=$f,scale=$w:-2" -q:v 3 "$tmp/s_%05d.jpg"
+    ffmpeg -v error -y "${seg[@]}" -i "$v" -vf "fps=$f,scale=$w:-2:out_range=pc" -strict unofficial -q:v 3 "$tmp/s_%05d.jpg"
     "$PY" "$T/sheet.py" "$tmp" "$out" "$f" "$cols" "$sfrom"
     rm -rf "$tmp" ;;
 

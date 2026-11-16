@@ -1,6 +1,7 @@
 # Katana NP — el Katana propio de North Pearl
 
 > **Instalación en un Mac nuevo:** sigue [INSTALL.md](INSTALL.md) (un comando: `./install.sh`).
+> **Usar con cualquier modelo/agente de IA (Antigravity, Claude Code, Cursor, Codex):** lee [REGLAS_USO_IA.md](REGLAS_USO_IA.md).
 
 Videos de motion graphics súper dinámicos al estilo de Higgsfield Katana, pero hechos aquí, sin suscripción.
 Le das **una referencia** (un video cuyo ritmo y estilo te gusten) y **tus recursos** (tomas, capturas, logo, textos), y Claude

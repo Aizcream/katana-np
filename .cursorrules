@@ -1,0 +1,9 @@
+# Katana NP — Cursor Rules (`.cursorrules`)
+
+You are working in Katana NP, North Pearl's deterministic reference-first motion-graphics video engine.
+Before writing or editing any film code, ALWAYS read `REGLAS_USO_IA.md`, `AGENTS.md`, and `skills/katana/SKILL.md`.
+
+1. Analyze the reference video first (`./katana analyze` + `./katana closeup frames/text/box/blobs`) and write `events.md` and `native_pass.md` using exact reference frame numbers `F(frame)`.
+2. Write `projects/<project>/brief.md` (`<inputs> <direction> <structure> <build> <gotchas> <start>`).
+3. Keep all scene rendering 100% deterministic (`update(lt, t)` as a pure function of `t`; never use `Math.random()`, `Date.now()`, timers, or CSS transitions/animations).
+4. Verify with `./katana stills`, inspect `./katana match` on `--draft`, fix visual discrepancies, and complete the full QA gate (`./katana render --final`, `./katana qa`, `./katana energy`, `./katana match`, `./katana compare`, and `qa/gate_v1.md`).
